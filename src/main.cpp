@@ -4,6 +4,7 @@
 #include "dht.h"
 #include "webthings.h"
 #include "ota.h"
+#include "maxThermocouple.h"
 
 void sample() {
     Serial.print("Czas na próbkę DHT");
@@ -20,10 +21,14 @@ void setup() {
 }
 
 void loop() {
+    Serial.println("LOOP");
+
     ArduinoOTA.handle();
-    adapter->update();
+    Serial.println("OTA handled");
+
+    updateWebThing(readDHTtemp(), 0, readThermocouple());
+    Serial.println("WebThing updated");
+
+    Serial.print("\n\n");
     delay(1000);
-    float temp = 0;
-    float hum = 0;
-    readDHT(&temp, &hum);
 }

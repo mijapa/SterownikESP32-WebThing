@@ -1,17 +1,24 @@
 #include "webthings.h"
-#include "Thing.h"
 
-const char *sensorTypes[] = {"TemperatureSensor", "MultiLevelSensor", "Sensor", nullptr};
-ThingDevice dhtSensor("dht4", "DHT22 Temperature & Humidity sensor", sensorTypes);
+WebThingAdapter *adapter;
+const char *dhtSensorTypes[] = {"TemperatureSensor", "MultiLevelSensor", "Sensor", nullptr};
+ThingDevice dhtSensor("dht22", "DHT22 Temperature & Humidity sensor", dhtSensorTypes);
 ThingProperty tempSensorProperty("temperature", "Temperature", NUMBER, "TemperatureProperty");
 ThingProperty humiditySensorProperty("humidity", "Humidity", NUMBER, "LevelProperty");
 
+const char *thermocoupleSensorTypes[] = {"TemperatureSensor", "Sensor", nullptr};
+ThingDevice thermocoupleSensor("thermo", "MAX6675 Temperature sensor", thermocoupleSensorTypes);
+ThingProperty thermocoupleSensorProperty("temperature", "Temperature", NUMBER, "TemperatureProperty");
+
 void setupWebThing() {
-    adapter = new WebThingAdapter("NodeMCU1", WiFi.localIP());
+    adapter = new WebThingAdapter("ESP32", WiFi.localIP());
 
     dhtSensor.addProperty(&tempSensorProperty);
     dhtSensor.addProperty(&humiditySensorProperty);
     adapter->addDevice(&dhtSensor);
+
+    thermocoupleSensor.addProperty(&thermocoupleSensorProperty);
+    adapter->addDevice(&thermocoupleSensor);
 
     adapter->begin();
     Serial.println("HTTP server started");
@@ -19,4 +26,17 @@ void setupWebThing() {
     Serial.print(WiFi.localIP());
     Serial.print("/things/");
     Serial.println(dhtSensor.id);
+}
+
+void updateWebThing(double temp, double hum, double thermocouple) {
+    ThingPropertyValue value;
+    value.number = temp;
+    tempSensorProperty.setValue(value);
+    value.number = hum;
+    humiditySensorProperty.setValue(value);
+
+    value.number = thermocouple;
+    thermocoupleSensorProperty.setValue(value);
+
+    adapter->update();
 }
