@@ -56,9 +56,9 @@ void setupWiFi() {
     Serial.print("IP address: ");
     Serial.println(WiFi.localIP());
 
-    if (MDNS.begin("esp8266")) {// Start the mDNS responder for esp8266.local
+    if (MDNS.begin("esp32")) {// Start the mDNS responder for esp8266.local
         MDNS.addService("http", "tcp", 80);
-        MDNS.addServiceTxt("http", "tcp", "url", "http://esp8266.local");
+        MDNS.addServiceTxt("http", "tcp", "url", "http://esp32.local");
         MDNS.addServiceTxt("http", "tcp", "webthing", "true");
         Serial.println("MDNS responder started");
     } else {
