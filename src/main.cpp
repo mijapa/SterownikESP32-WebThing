@@ -5,6 +5,7 @@
 #include "webthings.h"
 #include "ota.h"
 #include "maxThermocouple.h"
+#include "lcd.h"
 
 void sample() {
     Serial.print("Czas na próbkę DHT");
@@ -17,6 +18,7 @@ void setup() {
     setupWiFi();
     setupOTA();
     setupDHT();
+    setupLCD();
     setupWebThing();
 }
 
@@ -31,4 +33,6 @@ void loop() {
 
     Serial.print("\n\n");
     delay(1000);
+
+    loopLCD();
 }
