@@ -9,6 +9,7 @@
 #include "servo.h"
 #include "pid.h"
 #include "touch.h"
+#include "w5500.h"
 
 void sample() {
     Serial.print("Czas na próbkę DHT");
@@ -30,6 +31,8 @@ void setup() {
 }
 
 void loop() {
+    hardwareStatus();
+
     Serial.println("LOOP");
 
     ArduinoOTA.handle();
