@@ -6,12 +6,14 @@
 #include "ota.h"
 #include "maxThermocouple.h"
 #include "lcd.h"
+#include "servo.h"
 
 void sample() {
     Serial.print("Czas na próbkę DHT");
 }
 
 void setup() {
+    setupServo();
     pinMode(BUILTIN_LED, OUTPUT);
     digitalWrite(BUILTIN_LED, HIGH);
     Serial.begin(115200);
