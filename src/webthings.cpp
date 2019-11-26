@@ -1,3 +1,4 @@
+#include <WebThingAdapter.h>
 #include "webthings.h"
 
 WebThingAdapter *adapter;
