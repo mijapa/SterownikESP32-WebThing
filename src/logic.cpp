@@ -1,5 +1,6 @@
 #include "logic.h"
 
+
 //todo zamknięto drzwi gdy temperatura poniżej 100 - zapytaj czy rozpocząć rozpalanie
 
 //todo gdy po rozpaleniu (czas rozpalania) temperatura spadnie poniżej zadana - 20 - informuj o potrzebie dołożenia paliwa
@@ -10,3 +11,6 @@
 
 //todo alarmuj gdy temperatura przekroczona
 
+int logic(int a, int b) {
+    return a + b;
+}
