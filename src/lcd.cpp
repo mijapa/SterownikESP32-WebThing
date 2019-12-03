@@ -1,6 +1,7 @@
 #include <LiquidCrystal_PCF8574.h>
 #include <Wire.h>
 #include <HardwareSerial.h>
+#include "lcd.h"
 
 LiquidCrystal_PCF8574 lcd(0x27); // set the LCD address to 0x27 for a 16 chars and 2 line display
 int show = -1;
@@ -98,4 +99,11 @@ void loopLCD() {
         lcd.print(show - 13);
     }
     show = (show + 1) % 16;
+}
+
+void displayTemp(double temp) {
+    lcd.setBacklight(255);
+    lcd.home();
+    lcd.clear();
+    lcd.println(temp);
 }

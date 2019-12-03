@@ -6,3 +6,5 @@
 void setupLCD();
 
 void loopLCD();
+
+void displayTemp(double temp);
