@@ -15,14 +15,16 @@ void sample() {
 
 void setup() {
     setupServo();
-    pinMode(BUILTIN_LED, OUTPUT);
-    digitalWrite(BUILTIN_LED, HIGH);
-    Serial.begin(115200);
-    setupWiFi();
-    setupOTA();
     setupDHT();
     setupLCD();
+
+    Serial.begin(115200);
+    pinMode(BUILTIN_LED, OUTPUT);
+    digitalWrite(BUILTIN_LED, HIGH);
+
+    setupWiFi();
     setupWebThing();
+    setupOTA();
     setupPID();
 }
 
@@ -32,13 +34,17 @@ void loop() {
     ArduinoOTA.handle();
     Serial.println("OTA handled");
 
-    updateWebThing(readDHTtemp(), 0, readThermocouple());
+    updateWebThing(readDHTtemp(), readDHThumi(), readThermocouple());
     Serial.println("WebThing updated");
 
-    updatePID(50);
+    updatePID(500);
 
     Serial.print("\n\n");
-    delay(1000);
+    delay(3000);
 
-    loopLCD();
+    displayTemp(readDHTtemp());
+
+    if (WiFi.status() == WL_DISCONNECTED) {
+        tryConnectWiFi();
+    }
 }

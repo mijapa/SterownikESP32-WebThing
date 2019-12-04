@@ -4,3 +4,5 @@
 #endif //STEROWNIKESP32_WEBTHING_WIFI_H
 
 void setupWiFi();
+
+void tryConnectWiFi();

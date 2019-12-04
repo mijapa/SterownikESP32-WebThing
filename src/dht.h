@@ -11,3 +11,5 @@ void setupDHT();
 void readDHT(float *humidity, float *temperature);
 
 double readDHTtemp();
+
+double readDHThumi();

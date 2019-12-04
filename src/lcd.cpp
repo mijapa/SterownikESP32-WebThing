@@ -105,5 +105,7 @@ void displayTemp(double temp) {
     lcd.setBacklight(255);
     lcd.home();
     lcd.clear();
-    lcd.println(temp);
+    Serial.print("LCD write error: ");
+    Serial.println(lcd.getWriteError());
+    lcd.print(temp);
 }

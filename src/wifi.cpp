@@ -39,15 +39,18 @@ void setupWiFi() {
     //set callback that gets called when connecting to previous WiFi fails, and enters Access Point mode
     wifiManager.setAPCallback(configModeCallback);
 
+    wifiManager.setConfigPortalTimeout(60);
+
     //fetches ssid and pass and tries to connect
     //if it does not connect it starts an access point with the specified name
     //here  "AutoConnectAP"
     //and goes into a blocking loop awaiting configuration
     if (!wifiManager.autoConnect()) {
-        Serial.println("failed to connect and hit timeout");
-        //reset and try again, or maybe put it to deep sleep
-        ESP.restart();
-        delay(1000);
+        return;
+//        Serial.println("failed to connect and hit timeout");
+//        //reset and try again, or maybe put it to deep sleep
+//        ESP.restart();
+//        delay(1000);
     }
 
     Serial.println("");
@@ -56,12 +59,22 @@ void setupWiFi() {
     Serial.print("IP address: ");
     Serial.println(WiFi.localIP());
 
-    if (MDNS.begin("esp32")) {// Start the mDNS responder for esp8266.local
-        MDNS.addService("http", "tcp", 80);
-        MDNS.addServiceTxt("http", "tcp", "url", "http://esp32.local");
-        MDNS.addServiceTxt("http", "tcp", "webthing", "true");
-        Serial.println("MDNS responder started");
-    } else {
-        Serial.println("Error setting up MDNS responder!");
-    }
+//    if (MDNS.begin("esp32")) {// Start the mDNS responder for esp8266.local
+//        MDNS.addService("http", "tcp", 80);
+//        MDNS.addServiceTxt("http", "tcp", "url", "http://esp32.local");
+//        MDNS.addServiceTxt("http", "tcp", "webthing", "true");
+//        Serial.println("MDNS responder started");
+//    } else {
+//        Serial.println("Error setting up MDNS responder!");
+//    }
+    ledTicker.detach();
+}
+
+void tryConnectWiFi() {
+    Serial.println("tryConnectWiFi");
+    //WiFiManager
+    //Local intialization. Once its business is done, there is no need to keep it around
+    AsyncWiFiManager wifiManager(&server, &dns);
+    wifiManager.setConfigPortalTimeout(1);
+    wifiManager.autoConnect();
 }
