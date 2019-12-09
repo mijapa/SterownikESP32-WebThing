@@ -3,8 +3,8 @@
 
 #endif //STEROWNIKESP32_WEBTHING_MAXTHERMOCOUPLE_H
 
-#define THERMO_DO_PIN 12
-#define THERMO_CS_PIN 13
-#define THERMO_CLK_PIN 14
+#define THERMO_DO_PIN 19
+#define THERMO_CS_PIN 5
+#define THERMO_CLK_PIN 18
 
 double readThermocouple();
