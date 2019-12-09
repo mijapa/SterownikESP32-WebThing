@@ -8,6 +8,7 @@
 #include "lcd.h"
 #include "servo.h"
 #include "pid.h"
+#include "touch.h"
 
 void sample() {
     Serial.print("Czas na próbkę DHT");
@@ -47,4 +48,6 @@ void loop() {
     if (WiFi.status() == WL_DISCONNECTED) {
         tryConnectWiFi();
     }
+
+    printAllTouch();
 }
