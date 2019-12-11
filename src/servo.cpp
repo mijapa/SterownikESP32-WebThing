@@ -2,7 +2,7 @@
 #include <ESP32Servo.h>
 #include <Ticker.h>
 
-#define SERVO_PIN 4
+#define SERVO_PIN 25
 
 Servo myservo;
 Ticker servoTickeer;

@@ -39,7 +39,7 @@ void setupWiFi() {
     //set callback that gets called when connecting to previous WiFi fails, and enters Access Point mode
     wifiManager.setAPCallback(configModeCallback);
 
-    wifiManager.setConfigPortalTimeout(60);
+    wifiManager.setConfigPortalTimeout(1);
 
     //fetches ssid and pass and tries to connect
     //if it does not connect it starts an access point with the specified name

@@ -1,7 +1,11 @@
 #include <HardwareSerial.h>
 #include "touch.h"
 
-#define TRESHOLD 70
+#define  TOUCH_PIN1 13
+#define  TOUCH_PIN2 12
+#define  TOUCH_PIN3 14
+#define  TOUCH_PIN4 27
+#define  TOUCH_PIN5 15
 
 void printAllTouchValues() {
     Serial.print("Touch sensors: ");

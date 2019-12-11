@@ -24,6 +24,7 @@ void setup() {
     pinMode(BUILTIN_LED, OUTPUT);
     digitalWrite(BUILTIN_LED, HIGH);
 
+    setupW5500();
     setupWiFi();
     setupWebThing();
     setupOTA();
@@ -31,7 +32,6 @@ void setup() {
 }
 
 void loop() {
-    hardwareStatus();
 
     Serial.println("LOOP");
 
@@ -44,13 +44,14 @@ void loop() {
     updatePID(500);
 
     Serial.print("\n\n");
-    delay(3000);
+    delay(1000);
 
-    displayTemp(readDHTtemp());
+    displayTemp(readThermocouple());
 
     if (WiFi.status() == WL_DISCONNECTED) {
         tryConnectWiFi();
     }
 
     printAllTouch();
+//    loopW5500();
 }
