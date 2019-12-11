@@ -12,24 +12,32 @@ ThingDevice thermocoupleSensor("thermo", "MAX6675 Temperature sensor", thermocou
 ThingProperty thermocoupleSensorProperty("temperature", "Temperature", NUMBER, "TemperatureProperty");
 
 void setupWebThing() {
-    adapter = new WebThingAdapter("ESP32", WiFi.localIP());
+    if (WiFi.localIP()) {
+        adapter = new WebThingAdapter("ESP32", WiFi.localIP());
 
-    dhtSensor.addProperty(&tempSensorProperty);
-    dhtSensor.addProperty(&humiditySensorProperty);
-    adapter->addDevice(&dhtSensor);
+        dhtSensor.addProperty(&tempSensorProperty);
+        dhtSensor.addProperty(&humiditySensorProperty);
+        adapter->addDevice(&dhtSensor);
 
-    thermocoupleSensor.addProperty(&thermocoupleSensorProperty);
-    adapter->addDevice(&thermocoupleSensor);
+        thermocoupleSensor.addProperty(&thermocoupleSensorProperty);
+        adapter->addDevice(&thermocoupleSensor);
 
-    adapter->begin();
-    Serial.println("HTTP server started");
-    Serial.print("http://");
-    Serial.print(WiFi.localIP());
-    Serial.print("/things/");
-    Serial.println(dhtSensor.id);
+        adapter->begin();
+        Serial.println("HTTP server started");
+        Serial.print("http://");
+        Serial.print(WiFi.localIP());
+        Serial.print("/things/");
+        Serial.println(dhtSensor.id);
+    } else {
+        Serial.println("No local IP");
+    }
 }
 
 void updateWebThing(double temp, double hum, double thermocouple) {
+    if (!adapter) {
+        Serial.println("No WebThing adapter, resetup");
+        setupWebThing();
+    }
     ThingPropertyValue value;
     value.number = temp;
     tempSensorProperty.setValue(value);

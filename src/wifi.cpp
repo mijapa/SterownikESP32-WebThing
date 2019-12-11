@@ -3,9 +3,6 @@
 #include <ESPmDNS.h>
 #include "wifi.h"
 
-
-AsyncWebServer server(80);
-DNSServer dns;
 Ticker ledTicker;
 
 void blink() {
@@ -32,6 +29,8 @@ void setupWiFi() {
 
     //WiFiManager
     //Local intialization. Once its business is done, there is no need to keep it around
+    AsyncWebServer server(80);
+    DNSServer dns;
     AsyncWiFiManager wifiManager(&server, &dns);
     //reset settings - for testing
     //wifiManager.resetSettings();
@@ -39,13 +38,14 @@ void setupWiFi() {
     //set callback that gets called when connecting to previous WiFi fails, and enters Access Point mode
     wifiManager.setAPCallback(configModeCallback);
 
-    wifiManager.setConfigPortalTimeout(1);
+    wifiManager.setConfigPortalTimeout(90);
 
     //fetches ssid and pass and tries to connect
     //if it does not connect it starts an access point with the specified name
     //here  "AutoConnectAP"
     //and goes into a blocking loop awaiting configuration
     if (!wifiManager.autoConnect()) {
+        ledTicker.detach();
         return;
 //        Serial.println("failed to connect and hit timeout");
 //        //reset and try again, or maybe put it to deep sleep
@@ -74,6 +74,8 @@ void tryConnectWiFi() {
     Serial.println("tryConnectWiFi");
     //WiFiManager
     //Local intialization. Once its business is done, there is no need to keep it around
+    AsyncWebServer server(80);
+    DNSServer dns;
     AsyncWiFiManager wifiManager(&server, &dns);
     wifiManager.setConfigPortalTimeout(1);
     wifiManager.autoConnect();

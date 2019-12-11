@@ -26,9 +26,9 @@ void setup() {
 
     setupW5500();
     setupWiFi();
-    setupWebThing();
     setupOTA();
     setupPID();
+    setupWebThing();
 }
 
 void loop() {
@@ -48,7 +48,7 @@ void loop() {
 
     displayTemp(readThermocouple());
 
-    if (WiFi.status() == WL_DISCONNECTED) {
+    if (WiFi.status() != WL_CONNECTED) {
         tryConnectWiFi();
     }
 
