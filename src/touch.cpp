@@ -21,7 +21,7 @@ void printAllTouchValues() {
 }
 
 int isTouched(int touchValue, int treshold) {
-    if (touchValue > treshold) {
+    if (touchValue < treshold) {
         return true;
     } else {
         return false;
