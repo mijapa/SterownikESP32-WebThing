@@ -10,6 +10,7 @@
 #include "touch.h"
 #include "w5500.h"
 #include "buzzer.h"
+#include "loopAnalogRead.h"
 
 void sample() {
     Serial.print("Czas na próbkę DHT");
@@ -47,11 +48,12 @@ void loop() {
     Serial.print("\n\n");
     delay(1000);
 
-    displayTemp(readThermocouple());
+    displayTemp(analogRead2());
 
 
     tryConnectWiFi();
 
     printAllTouch();
 //    loopW5500();
+    loopAnalogRead();
 }
