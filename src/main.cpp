@@ -1,6 +1,5 @@
 #include <Arduino.h>
-#include <ArduinoOTA.h>
-#include "wifi.h"
+#include "wifiManager.h"
 #include "dht.h"
 #include "webthings.h"
 #include "ota.h"
@@ -10,6 +9,7 @@
 #include "pid.h"
 #include "touch.h"
 #include "w5500.h"
+#include "buzzer.h"
 
 void sample() {
     Serial.print("Czas na próbkę DHT");
@@ -17,8 +17,9 @@ void sample() {
 
 void setup() {
     setupServo();
-    setupDHT();
     setupLCD();
+    toneHello();
+    setupDHT();
 
     Serial.begin(115200);
     pinMode(BUILTIN_LED, OUTPUT);
@@ -35,7 +36,7 @@ void loop() {
 
     Serial.println("LOOP");
 
-    ArduinoOTA.handle();
+    handleOTA();
     Serial.println("OTA handled");
 
     updateWebThing(readDHTtemp(), readDHThumi(), readThermocouple());
@@ -48,9 +49,8 @@ void loop() {
 
     displayTemp(readThermocouple());
 
-    if (WiFi.status() != WL_CONNECTED) {
-        tryConnectWiFi();
-    }
+
+    tryConnectWiFi();
 
     printAllTouch();
 //    loopW5500();

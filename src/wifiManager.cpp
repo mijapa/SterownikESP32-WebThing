@@ -1,7 +1,7 @@
 #include <ESPAsyncWiFiManager.h>
 #include <Ticker.h>
 #include <ESPmDNS.h>
-#include "wifi.h"
+#include "wifiManager.h"
 
 Ticker ledTicker;
 
@@ -38,7 +38,7 @@ void setupWiFi() {
     //set callback that gets called when connecting to previous WiFi fails, and enters Access Point mode
     wifiManager.setAPCallback(configModeCallback);
 
-    wifiManager.setConfigPortalTimeout(90);
+    wifiManager.setConfigPortalTimeout(3);
 
     //fetches ssid and pass and tries to connect
     //if it does not connect it starts an access point with the specified name
@@ -71,12 +71,14 @@ void setupWiFi() {
 }
 
 void tryConnectWiFi() {
-    Serial.println("tryConnectWiFi");
-    //WiFiManager
-    //Local intialization. Once its business is done, there is no need to keep it around
-    AsyncWebServer server(80);
-    DNSServer dns;
-    AsyncWiFiManager wifiManager(&server, &dns);
-    wifiManager.setConfigPortalTimeout(1);
-    wifiManager.autoConnect();
+    if (WiFi.status() != WL_CONNECTED) {
+        Serial.println("tryConnectWiFi");
+        //WiFiManager
+        //Local intialization. Once its business is done, there is no need to keep it around
+        AsyncWebServer server(80);
+        DNSServer dns;
+        AsyncWiFiManager wifiManager(&server, &dns);
+        wifiManager.setConfigPortalTimeout(1);
+        wifiManager.autoConnect();
+    }
 }

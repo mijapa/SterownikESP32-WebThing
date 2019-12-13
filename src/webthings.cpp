@@ -37,6 +37,7 @@ void updateWebThing(double temp, double hum, double thermocouple) {
     if (!adapter) {
         Serial.println("No WebThing adapter, resetup");
         setupWebThing();
+        return;
     }
     ThingPropertyValue value;
     value.number = temp;

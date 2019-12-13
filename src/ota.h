@@ -3,3 +3,5 @@
 #endif //STEROWNIKESP32_WEBTHING_OTA_H
 
 void setupOTA();
+
+void handleOTA();
