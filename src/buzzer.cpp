@@ -14,8 +14,8 @@ void toneHello() {
     ledcSetup(channel, freq, resolution);
     ledcAttachPin(BUZZER_PIN, channel);
 
-    ledcWrite(channel, 1);
-    ledcWriteTone(channel, 2000);
+    ledcWrite(channel, 200);
+    ledcWriteTone(channel, 4000);
     delay(50);
     //todo change delay to timer
 

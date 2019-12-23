@@ -11,6 +11,7 @@
 #include "w5500.h"
 #include "buzzer.h"
 #include "loopAnalogRead.h"
+#include "dallas.h"
 
 void sample() {
     Serial.print("Czas na próbkę DHT");
@@ -31,6 +32,7 @@ void setup() {
     setupOTA();
     setupPID();
     setupWebThing();
+    setupDallas();
 }
 
 void loop() {
@@ -56,4 +58,5 @@ void loop() {
     printAllTouch();
 //    loopW5500();
     loopAnalogRead();
+    loopDallas();
 }
