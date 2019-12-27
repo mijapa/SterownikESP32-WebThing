@@ -30,15 +30,15 @@ int isTouched(int touchValue, int treshold) {
 
 void printAllTouchReadings() {
     Serial.print("Touch sensors: ");
-    Serial.print(isTouched(touchRead(TOUCH_PIN1), 70));
+    Serial.print(isTouched(touchRead(TOUCH_PIN1), 56));
     Serial.print(", ");
-    Serial.print(isTouched(touchRead(TOUCH_PIN2), 70));
+    Serial.print(isTouched(touchRead(TOUCH_PIN2), 55));
     Serial.print(", ");
-    Serial.print(isTouched(touchRead(TOUCH_PIN3), 70));
+    Serial.print(isTouched(touchRead(TOUCH_PIN3), 54));
     Serial.print(", ");
-    Serial.print(isTouched(touchRead(TOUCH_PIN4), 70));
+    Serial.print(isTouched(touchRead(TOUCH_PIN4), 55));
     Serial.print(", ");
-    Serial.println(isTouched(touchRead(TOUCH_PIN5), 50));
+    Serial.println(isTouched(touchRead(TOUCH_PIN5), 51));
 
 }
 
