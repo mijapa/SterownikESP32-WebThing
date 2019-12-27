@@ -5,7 +5,7 @@
 #include <HardwareSerial.h>
 
 // Data wire is plugged into port 2 on the Arduino
-#define ONE_WIRE_BUS 2
+#define ONE_WIRE_BUS 3
 
 // Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
 OneWire oneWire(ONE_WIRE_BUS);
@@ -16,11 +16,39 @@ DallasTemperature sensors(&oneWire);
 /*
  * The setup function. We only start the sensors here
  */
+uint8_t findDevices(OneWire ow, int pin) {
+    uint8_t address[8];
+    uint8_t count = 0;
+
+
+    if (ow.search(address)) {
+        Serial.print("\nuint8_t pin");
+        Serial.print(pin, DEC);
+        Serial.println("[][8] = {");
+        do {
+            count++;
+            Serial.println("  {");
+            for (uint8_t i = 0; i < 8; i++) {
+                Serial.print("0x");
+                if (address[i] < 0x10) Serial.print("0");
+                Serial.print(address[i], HEX);
+                if (i < 7) Serial.print(", ");
+            }
+            Serial.println("  },");
+        } while (ow.search(address));
+
+        Serial.println("};");
+        Serial.print("// nr devices found: ");
+        Serial.println(count);
+    }
+
+    return count;
+}
 
 void setupDallas() {
     // start serial port
-    Serial.begin(9600);
     Serial.println("Dallas Temperature IC Control Library Demo");
+    findDevices(oneWire, ONE_WIRE_BUS);
 
     // Start up the library
     sensors.begin();
@@ -37,3 +65,4 @@ void loopDallas() {
     Serial.print("Temperature for the device 1 (index 0) is: ");
     Serial.println(sensors.getTempCByIndex(0));
 }
+

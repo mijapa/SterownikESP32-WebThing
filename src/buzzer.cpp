@@ -6,7 +6,7 @@
 
 void toneHello() {
     int freq = 2000;
-    int channel = 0;
+    int channel = 15;
     int resolution = 8;
 
     Serial.println("Tone Hello");
@@ -14,12 +14,13 @@ void toneHello() {
     ledcSetup(channel, freq, resolution);
     ledcAttachPin(BUZZER_PIN, channel);
 
-    ledcWrite(channel, 200);
+    ledcWrite(channel, 100);
     ledcWriteTone(channel, 4000);
     delay(50);
     //todo change delay to timer
-
-    ledcDetachPin(BUZZER_PIN);
+    ledcWrite(channel, 0);
+//    ledcDetachPin(BUZZER_PIN);
+//    digitalWrite(BUZZER_PIN, LOW);
 
 //    for (int dutyCycle = 0; dutyCycle <= 255; dutyCycle=dutyCycle+10){
 //
@@ -31,7 +32,7 @@ void toneHello() {
 //
 //    ledcWrite(channel, 125);
 //
-//    for (int freq = 255; freq < 10000; freq = freq + 250){
+//    for (int freq = 0; freq < 10000; freq = freq + 250){
 //
 //        Serial.println(freq);
 //

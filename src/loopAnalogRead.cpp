@@ -15,5 +15,5 @@ void loopAnalogRead() {
 }
 
 int analogRead2() {
-    return (analogRead(MEASURE_PIN2));
+    return (analogRead(MEASURE_PIN3));
 }

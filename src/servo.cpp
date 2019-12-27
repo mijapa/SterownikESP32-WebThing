@@ -10,6 +10,7 @@ Ticker servoTickeer;
 int i = 0;
 
 void servoRoutine() {
+//    Serial.println("Servo routine");
     myservo.write(i);
     i++;
     i = i % 2500;
