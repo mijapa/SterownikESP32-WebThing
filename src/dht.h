@@ -8,6 +8,8 @@ void sample();
 
 void setupDHT();
 
+double readHeatIndex();
+
 void readDHT(float *humidity, float *temperature);
 
 double readDHTtemp();

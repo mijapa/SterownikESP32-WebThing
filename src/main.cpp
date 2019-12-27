@@ -5,7 +5,6 @@
 #include "ota.h"
 #include "maxThermocouple.h"
 #include "lcd.h"
-#include "servo.h"
 #include "pid.h"
 #include "touch.h"
 #include "w5500.h"
@@ -18,7 +17,6 @@ void sample() {
 }
 
 void setup() {
-    setupServo();
     setupLCD();
     toneHello();
     setupDHT();
@@ -45,12 +43,10 @@ void loop() {
     updateWebThing(readDHTtemp(), readDHThumi(), readThermocouple());
     Serial.println("WebThing updated");
 
-    updatePID(500);
-
     Serial.print("\n\n");
     delay(1000);
 
-    displayTemp(analogRead2());
+//    displayTemp(analogRead2());
 
 
     tryConnectWiFi();
@@ -59,4 +55,5 @@ void loop() {
 //    loopW5500();
     loopAnalogRead();
     loopDallas();
+    updatePID(readThermocouple(), readHeatIndex());
 }

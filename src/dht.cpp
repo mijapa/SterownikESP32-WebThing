@@ -10,6 +10,11 @@ void setupDHT() {
 //    sampler.attach_ms(dht.getMinimumSamplingPeriod(), sample);
 }
 
+double readHeatIndex() {
+    double heatIndex = dht.computeHeatIndex(dht.getTemperature(), dht.getHumidity());
+    return heatIndex;
+}
+
 void readDHT(float *temperature, float *humidity) {
     Serial.println("Reading temperature and humidity...");
     *humidity = dht.getHumidity();

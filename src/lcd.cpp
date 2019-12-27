@@ -32,7 +32,6 @@ void setupLCD() {
     } else {
         Serial.println(": LCD not found.");
     } // if
-
 }
 
 void loopLCD() {
@@ -108,4 +107,23 @@ void displayTemp(double temp) {
     Serial.print("LCD write error: ");
     Serial.println(lcd.getWriteError());
     lcd.print(temp);
+}
+
+void displayBasic(double Setpoint, double Setpoint2, double hic, double thermocouple, int servoPercentage) {
+    lcd.setBacklight(255);
+    lcd.setCursor(0,
+                  1);// set the cursor to column 0, line 1 (note: line 1 is the second row, since counting begins with 0)
+    //lcd.print(millis() / 1000);// print the number of seconds since reset:
+    lcd.print(Setpoint2);//temperatura zadana DHT
+    lcd.print(" ");
+    lcd.print(hic); //temperatura odczuwalna DHT22
+    lcd.print(" ");
+    lcd.print(servoPercentage);//procent otwarcia przepustnicy obliczony na podstawie Output z PID
+    lcd.print("   ");
+    lcd.setCursor(7, 0);
+    lcd.print(" ");
+    lcd.print(thermocouple);//temperatura termopara
+    lcd.setCursor(0, 0);
+    lcd.print(Setpoint);//Setpoint z PID
+    lcd.print(" ");
 }
