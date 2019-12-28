@@ -28,9 +28,11 @@ void setup() {
     setupW5500();
     setupWiFi();
     setupOTA();
+    handleOTA();
     setupPID();
     setupWebThing();
     setupDallas();
+    setupTouch();
 }
 
 void loop() {

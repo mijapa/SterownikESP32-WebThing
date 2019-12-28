@@ -4,3 +4,5 @@
 #endif //STEROWNIKESP32_WEBTHING_TOUCH_H
 
 void printAllTouch();
+
+void setupTouch();
