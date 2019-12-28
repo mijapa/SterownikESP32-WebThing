@@ -6,13 +6,13 @@
 #include <Arduino.h>
 #include "lcd.h"
 
-#define Setpoint2_START 19.2 //wstępnie zadana temperatura (DHT)
+#define Setpoint2_START 20 //wstępnie zadana temperatura (DHT)
 #define MAX_TEMP_ZAD_MAX 260 //maksymalna możliwa do zadania temperatura
 #define MIN_TEMP_ZAD_MIN 120 //minimalna możlliwa do zadania temperatura
 #define TEMP_ZAD_MAX_PRZY_ROZPALANIU 200 //temperatura
 #define TEMP_ZAD_MIN_PRZY_ROZPALANIU 170
 #define CZAS_ROZPALANIA 1200000 //czas rozpalania w milisekundach
-#define TEMP_ZAD_MAX 260 //zdefinioweanie zakresu temperatur termopara w kominie
+#define TEMP_ZAD_MAX 360 //zdefinioweanie zakresu temperatur termopara w kominie
 #define TEMP_ZAD_MIN 180
 
 int dystansPid = 30;// do przełączania agresywny/łagodnie sterowanie
@@ -40,9 +40,9 @@ void setupPID() {
 //    myPID.SetTunings(consKp, consKi, consKd);
 
     Setpoint2 = Setpoint2_START;
-    myPID2.SetSampleTime(3000); //determines how often the PID algorithm evaluates
-    myPID2.SetOutputLimits(TEMP_ZAD_MIN_PRZY_ROZPALANIU,
-                           TEMP_ZAD_MAX_PRZY_ROZPALANIU); //zakres wyjściowy przy rozpalaniu
+    myPID2.SetSampleTime(2000); //determines how often the PID algorithm evaluates
+    myPID2.SetOutputLimits(TEMP_ZAD_MIN,
+                           TEMP_ZAD_MAX); //zakres wyjściowy przy rozpalaniu
     myPID2.SetControllerDirection(
             DIRECT); //wybranie trybu pracy DIRECT/REVERSE (reverse - aby input wzrósł output musi zmaleć)
     myPID2.SetMode(AUTOMATIC);//turn the PID on
@@ -60,12 +60,17 @@ void updatePID(double thermocoupleTemp, double heatIndex) {
     }
     myPID.Compute();//obliczanie PID
 
-
-    float hic = heatIndex;
-    Input2 = hic;//odczytanie temperatury odczuwalnej do input 2
+    Input2 = heatIndex;
     myPID2.Compute();//obliczanie PID2
-    Setpoint = Output2;//przekazanie obliczonej zadanej temperatury w kominie do Setpoint myPID
-
+    if (Output2) {
+        Setpoint = Output2;//przekazanie obliczonej zadanej temperatury w kominie do Setpoint myPID
+    } else {
+        Serial.println("Output2 is NAN");
+        Setpoint = TEMP_ZAD_MIN;
+    }
     set_servo_new_pos(Output);//przekazanie obliczonej pozycji do zmiennej serva
-    displayBasic(Setpoint, Setpoint2, hic, thermocoupleTemp, map(Output, SERVO_ZAMKN_MAX, SERVO_ZAMKN_MIN, 0, 100));
+    Serial.print("Setpoint: ");
+    Serial.println(Setpoint);
+    displayBasic(Setpoint, Setpoint2, heatIndex, thermocoupleTemp,
+                 map(Output, SERVO_ZAMKN_MAX, SERVO_ZAMKN_MIN, 0, 100));
 }

@@ -18,18 +18,21 @@ uint8_t touch_pin4_threshold = 0;
 uint8_t touch_pin5_threshold = 0;
 
 void set_threshold() {
-    delay(5000);
     touch_pin1_threshold = touchRead(TOUCH_PIN1) - TOUCH_THRESHOLD_DIFF;
     touch_pin2_threshold = touchRead(TOUCH_PIN2) - TOUCH_THRESHOLD_DIFF;
     touch_pin3_threshold = touchRead(TOUCH_PIN3) - TOUCH_THRESHOLD_DIFF;
     touch_pin4_threshold = touchRead(TOUCH_PIN4) - TOUCH_THRESHOLD_DIFF;
     touch_pin5_threshold = touchRead(TOUCH_PIN5) - TOUCH_THRESHOLD_DIFF;
     Serial.print("Set thresholds: ");
-    Serial.print(touch_pin1_threshold + ", ");
-    Serial.print(touch_pin2_threshold + ", ");
-    Serial.print(touch_pin3_threshold + ", ");
-    Serial.print(touch_pin4_threshold + ", ");
-    Serial.print(touch_pin5_threshold + ", ");
+    Serial.print(touch_pin1_threshold);
+    Serial.print(", ");
+    Serial.print(touch_pin2_threshold);
+    Serial.print(", ");
+    Serial.print(touch_pin3_threshold);
+    Serial.print(", ");
+    Serial.print(touch_pin4_threshold);
+    Serial.print(", ");
+    Serial.print(touch_pin5_threshold);
     Serial.println("");
 }
 
