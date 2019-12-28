@@ -54,17 +54,16 @@ void enable_touch_interrupt() {
 
 void gotTouch() {//callback should be very short
     touch_pad_intr_disable();
-    Serial.println("Touched\n");
     interruptTicker.attach_ms(5000, enable_touch_interrupt);
 }
 
 void setupTouch() {
     set_threshold();
-    touchAttachInterrupt(TOUCH_PIN1, gotTouch, touch_pin1_threshold);
-    touchAttachInterrupt(TOUCH_PIN2, gotTouch, touch_pin2_threshold);
-    touchAttachInterrupt(TOUCH_PIN3, gotTouch, touch_pin3_threshold);
-    touchAttachInterrupt(TOUCH_PIN4, gotTouch, touch_pin4_threshold);
-    touchAttachInterrupt(TOUCH_PIN5, gotTouch, touch_pin5_threshold);
+//    touchAttachInterrupt(TOUCH_PIN1, gotTouch, touch_pin1_threshold);
+//    touchAttachInterrupt(TOUCH_PIN2, gotTouch, touch_pin2_threshold);
+//    touchAttachInterrupt(TOUCH_PIN3, gotTouch, touch_pin3_threshold);
+//    touchAttachInterrupt(TOUCH_PIN4, gotTouch, touch_pin4_threshold);
+//    touchAttachInterrupt(TOUCH_PIN5, gotTouch, touch_pin5_threshold);
 }
 
 int isTouched(int touchValue, int treshold) {
