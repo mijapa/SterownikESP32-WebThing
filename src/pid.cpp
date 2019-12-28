@@ -5,6 +5,7 @@
 #include <HardwareSerial.h>
 #include <Arduino.h>
 #include "lcd.h"
+#include "webthings.h"
 
 #define Setpoint2_START 20 //wstępnie zadana temperatura (DHT)
 #define MAX_TEMP_ZAD_MAX 260 //maksymalna możliwa do zadania temperatura
@@ -71,6 +72,8 @@ void updatePID(double thermocoupleTemp, double heatIndex) {
     set_servo_new_pos(Output);//przekazanie obliczonej pozycji do zmiennej serva
     Serial.print("Setpoint: ");
     Serial.println(Setpoint);
+    int servoPercentage = map(Output, SERVO_ZAMKN_MAX, SERVO_ZAMKN_MIN, 0, 100);
     displayBasic(Setpoint, Setpoint2, heatIndex, thermocoupleTemp,
-                 map(Output, SERVO_ZAMKN_MAX, SERVO_ZAMKN_MIN, 0, 100));
+                 servoPercentage);
+    updatePIDWebThing(servoPercentage);
 }

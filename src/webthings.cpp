@@ -11,6 +11,10 @@ const char *thermocoupleSensorTypes[] = {"TemperatureSensor", "Sensor", nullptr}
 ThingDevice thermocoupleSensor("thermo", "MAX6675 Temperature sensor", thermocoupleSensorTypes);
 ThingProperty thermocoupleSensorProperty("temperature", "Temperature", NUMBER, "TemperatureProperty");
 
+const char *pidSensorTypes[] = {"MultiLevelSensor", "Sensor", nullptr};
+ThingDevice pidSensor("pid", "PID servo regulation", pidSensorTypes);
+ThingProperty pidSensorProperty("servo", "Servo regulating stove air inlet", NUMBER, "LevelProperty");
+
 void setupWebThing() {
     if (WiFi.localIP()) {
         adapter = new WebThingAdapter("ESP32", WiFi.localIP());
@@ -21,6 +25,9 @@ void setupWebThing() {
 
         thermocoupleSensor.addProperty(&thermocoupleSensorProperty);
         adapter->addDevice(&thermocoupleSensor);
+
+        pidSensor.addProperty(&pidSensorProperty);
+        adapter->addDevice(&pidSensor);
 
         adapter->begin();
         Serial.println("HTTP server started");
@@ -48,5 +55,12 @@ void updateWebThing(double temp, double hum, double thermocouple) {
     value.number = thermocouple;
     thermocoupleSensorProperty.setValue(value);
 
+    adapter->update();
+}
+
+void updatePIDWebThing(double servo) {
+    ThingPropertyValue value;
+    value.number = servo;
+    pidSensorProperty.setValue(value);
     adapter->update();
 }
