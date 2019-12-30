@@ -32,7 +32,7 @@ PID myPID2(&Input2, &Output2, &Setpoint2, 1, 0.05, 0.25, DIRECT);//PID TEMPERATU
 void setupPID() {
     //PID SERVO initialize the variables we're linked to
     Setpoint = SERVO_ZAMKN_MAX;
-    myPID.SetSampleTime(1000); //determines how often the PID algorithm evaluates
+    myPID.SetSampleTime(3000); //determines how often the PID algorithm evaluates
     myPID.SetOutputLimits(SERVO_ZAMKN_MIN,
                           SERVO_ZAMKN_MAX - 10); //zakres wyjściowy, większy parametr serva większe zamknięcie
     myPID.SetControllerDirection(
@@ -42,7 +42,7 @@ void setupPID() {
     myPID.SetTunings(consKp, consKi, consKd);
 
     Setpoint2 = Setpoint2_START;
-    myPID2.SetSampleTime(1000); //determines how often the PID algorithm evaluates
+    myPID2.SetSampleTime(3000); //determines how often the PID algorithm evaluates
     myPID2.SetOutputLimits(TEMP_ZAD_MIN,
                            TEMP_ZAD_MAX); //zakres wyjściowy przy rozpalaniu
     myPID2.SetControllerDirection(
@@ -55,9 +55,9 @@ void updatePID() {
     Input = readThermocouple();
     //todo remove - test purpose only
     Input *= 10;
-    Serial.println(Input);
-    Serial.println(Output);
-    Serial.println(Setpoint);
+//    Serial.println(Input);
+//    Serial.println(Output);
+//    Serial.println(Setpoint);
 
 //    double gap = abs(Setpoint - Input); //distance away from setpoint
 //    if (gap < dystansPid) //jeśli dalej od zadanej to agressive, jeśli bliżej conservative
@@ -77,9 +77,9 @@ void updatePID() {
     Input2 = (int) Input2;
     Input2 /= 100;
 
-    Serial.println(Input2);
-    Serial.println(Output2);
-    Serial.println(Setpoint2);
+//    Serial.println(Input2);
+//    Serial.println(Output2);
+//    Serial.println(Setpoint2);
 
     myPID2.Compute();//obliczanie PID2
 
