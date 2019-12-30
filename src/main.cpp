@@ -11,13 +11,11 @@
 #include "buzzer.h"
 #include "loopAnalogRead.h"
 #include "dallas.h"
-
-void sample() {
-    Serial.print("Czas na próbkę DHT");
-}
+#include "servo.h"
 
 void setup() {
     setupLCD();
+    set_servo_at_begining();
     toneHello();
     setupDHT();
 
@@ -36,25 +34,15 @@ void setup() {
 }
 
 void loop() {
-
     Serial.println("LOOP");
 
-    handleOTA();
-    Serial.println("OTA handled");
-
     updateWebThing(readDHTtemp(), readDHThumi(), readThermocouple());
-    Serial.println("WebThing updated");
 
     Serial.print("\n\n");
     delay(1000);
 
-//    displayTemp(analogRead2());
-
-
     tryConnectWiFi();
-
     printAllTouch();
-//    loopW5500();
     loopAnalogRead();
     loopDallas();
     updatePID(readThermocouple(), readHeatIndex());

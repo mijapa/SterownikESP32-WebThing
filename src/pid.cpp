@@ -14,7 +14,7 @@
 #define TEMP_ZAD_MIN_PRZY_ROZPALANIU 170
 #define CZAS_ROZPALANIA 1200000 //czas rozpalania w milisekundach
 #define TEMP_ZAD_MAX 360 //zdefinioweanie zakresu temperatur termopara w kominie
-#define TEMP_ZAD_MIN 180
+#define TEMP_ZAD_MIN 260
 
 int dystansPid = 30;// do przełączania agresywny/łagodnie sterowanie
 double Setpoint, Input, Output; //Define Variables we'll be connecting to

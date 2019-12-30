@@ -4,10 +4,13 @@
 
 #define SERVO_PIN 25
 
-
 Servo myservo;
-Ticker servoTickeer;
+Ticker detachTicker;
 int oldPos = SERVO_ZAMKN_MAX;
+
+void servoDetach() {
+    myservo.detach();
+}
 
 void set_servo_at_begining() {
     myservo.attach(SERVO_PIN);  // attaches the servo on pin 5 to the servo object
@@ -21,33 +24,21 @@ void set_servo_at_begining() {
 }
 
 void set_servo_new_pos(int pos) {
-    if (pos != oldPos) { //sprawdzanie czy zadana pozycja dla serva się zmieniła
-        myservo.attach(SERVO_PIN);
-        delay(10);
-        myservo.write(pos);
-        if (pos - oldPos < 5 && pos - oldPos > -5) {
-            delay(200);
-        } else {
-            delay(2000);
+    if (pos >= 0 && pos <= 100) {
+        if (pos != oldPos) { //sprawdzanie czy zadana pozycja dla serva się zmieniła
+            detachTicker.detach();
+            myservo.attach(SERVO_PIN);
+            delay(10);
+            myservo.write(pos);
+            if (pos - oldPos < 5 && pos - oldPos > -5) {
+                detachTicker.once_ms(200, servoDetach);
+            } else {
+                detachTicker.once_ms(2000, servoDetach);
+            }
+            oldPos = pos;//zmiana starej pozycji na nową
         }
-        myservo.detach();
-
-        oldPos = pos;//zmiana starej pozycji na nową
+    } else {
+        Serial.println("Wrong servo pos parameter");
     }
-}
-
-int i = 0;
-
-void servoRoutine() {
-//    Serial.println("Servo routine");
-    myservo.write(i);
-    i++;
-    i = i % 2500;
-    if (i < 500) i = 500;
-}
-
-void setupServo() {
-    myservo.attach(SERVO_PIN);
-    servoTickeer.attach_ms(100, servoRoutine);
 }
 
