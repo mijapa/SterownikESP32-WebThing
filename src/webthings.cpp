@@ -14,6 +14,7 @@ ThingProperty thermocoupleSensorProperty("temperature", "Temperature", NUMBER, "
 const char *pidSensorTypes[] = {"MultiLevelSensor", "Sensor", nullptr};
 ThingDevice pidSensor("pid", "PID servo regulation", pidSensorTypes);
 ThingProperty pidSensorProperty("servo", "Servo regulating stove air inlet", NUMBER, "LevelProperty");
+ThingProperty pidSetpointProperty("thermo_setpoint", "Chimney temperature set point", NUMBER, "LevelProperty");
 
 void setupWebThing() {
     if (WiFi.localIP()) {
@@ -27,6 +28,7 @@ void setupWebThing() {
         adapter->addDevice(&thermocoupleSensor);
 
         pidSensor.addProperty(&pidSensorProperty);
+        pidSensor.addProperty(&pidSetpointProperty);
         adapter->addDevice(&pidSensor);
 
         adapter->begin();
@@ -58,9 +60,11 @@ void updateWebThing(double temp, double hum, double thermocouple) {
     adapter->update();
 }
 
-void updatePIDWebThing(double servo) {
+void updatePIDWebThing(double servo, double setpoint2) {
     ThingPropertyValue value;
     value.number = servo;
+    pidSensorProperty.setValue(value);
+    value.number = setpoint2;
     pidSensorProperty.setValue(value);
     adapter->update();
 }

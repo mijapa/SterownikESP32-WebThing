@@ -1,7 +1,6 @@
 #include "pid.h"
 #include "servo.h"
 #include <PID_v1.h>
-#include <cstdlib>
 #include <HardwareSerial.h>
 #include <Arduino.h>
 #include "lcd.h"
@@ -13,8 +12,8 @@
 #define TEMP_ZAD_MAX_PRZY_ROZPALANIU 200 //temperatura
 #define TEMP_ZAD_MIN_PRZY_ROZPALANIU 170
 #define CZAS_ROZPALANIA 1200000 //czas rozpalania w milisekundach
-#define TEMP_ZAD_MAX 360 //zdefinioweanie zakresu temperatur termopara w kominie
-#define TEMP_ZAD_MIN 260
+#define TEMP_ZAD_MAX 36 //zdefinioweanie zakresu temperatur termopara w kominie
+#define TEMP_ZAD_MIN 26
 
 int dystansPid = 30;// do przełączania agresywny/łagodnie sterowanie
 double Setpoint, Input, Output; //Define Variables we'll be connecting to
@@ -75,5 +74,5 @@ void updatePID(double thermocoupleTemp, double heatIndex) {
     int servoPercentage = map(Output, SERVO_ZAMKN_MAX, SERVO_ZAMKN_MIN, 0, 100);
     displayBasic(Setpoint, Setpoint2, heatIndex, thermocoupleTemp,
                  servoPercentage);
-    updatePIDWebThing(servoPercentage);
+    updatePIDWebThing(servoPercentage, Setpoint2);
 }

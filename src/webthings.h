@@ -6,4 +6,4 @@ void setupWebThing();
 
 void updateWebThing(double temp, double hum, double d);
 
-void updatePIDWebThing(double servo);
+void updatePIDWebThing(double servo, double setpoint2);
