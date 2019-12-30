@@ -3,9 +3,11 @@
 #include <Ticker.h>
 
 #define SERVO_PIN 25
+#define SMALL_POS_DIFF 5
 
 Servo myservo;
 Ticker detachTicker;
+Ticker waitToAttach;
 int oldPos = SERVO_ZAMKN_MAX;
 
 void servoDetach() {
@@ -23,22 +25,21 @@ void set_servo_at_begining() {
     myservo.detach();
 }
 
-void set_servo_new_pos(int pos) {
-    if (pos >= 0 && pos <= 100) {
-        if (pos != oldPos) { //sprawdzanie czy zadana pozycja dla serva się zmieniła
-            detachTicker.detach();
-            myservo.attach(SERVO_PIN);
-            delay(10);
-            myservo.write(pos);
-            if (pos - oldPos < 5 && pos - oldPos > -5) {
-                detachTicker.once_ms(200, servoDetach);
-            } else {
-                detachTicker.once_ms(2000, servoDetach);
-            }
-            oldPos = pos;//zmiana starej pozycji na nową
-        }
+void write_pos(int pos) {
+    myservo.write(pos);
+    if (abs(pos - oldPos) < SMALL_POS_DIFF) {
+        detachTicker.once_ms(200, servoDetach);
     } else {
-        Serial.println("Wrong servo pos parameter");
+        detachTicker.once_ms(2000, servoDetach);
+    }
+    oldPos = pos;//zmiana starej pozycji na nową
+}
+
+void set_servo_new_pos(int pos) {
+    if (pos != oldPos) { //sprawdzanie czy zadana pozycja dla serva się zmieniła
+        detachTicker.detach();
+        myservo.attach(SERVO_PIN);
+        waitToAttach.once_ms(5, write_pos, pos);
     }
 }
 

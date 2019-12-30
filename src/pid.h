@@ -5,4 +5,4 @@
 
 void setupPID();
 
-void updatePID(double thermocoupleTemp, double heatIndex);
+void updatePID();

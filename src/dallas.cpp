@@ -51,12 +51,12 @@ void loopDallas() {
 //    delay(2000);
     // call sensors.requestTemperatures() to issue a global temperature
     // request to all devices on the bus
-    Serial.print("Requesting temperatures...");
+//    Serial.print("Requesting temperatures...");
     sensors.requestTemperatures(); // Send the command to get temperatures
-    Serial.println("DONE");
+//    Serial.println("DONE");
     // After we got the temperatures, we can print them here.
     // We use the function ByIndex, and as an example get the temperature from the first sensor only.
-    Serial.print("Temperature for the device 1 (index 0) is: ");
+    Serial.print("Dallas temperature is: ");
     Serial.println(sensors.getTempCByIndex(0));
 }
 

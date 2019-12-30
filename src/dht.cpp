@@ -10,9 +10,18 @@ void setupDHT() {
 //    sampler.attach_ms(dht.getMinimumSamplingPeriod(), sample);
 }
 
-double readHeatIndex() {
-    double heatIndex = dht.computeHeatIndex(dht.getTemperature(), dht.getHumidity());
-    return heatIndex;
+int readDhtHeatIndex(double *heatIndex) {
+    if (dht.getStatus() == 0) {
+        dht.values = dht.getTempAndHumidity();
+        if (dht.values.humidity != nanf("") && dht.values.temperature != nanf("")) {
+            if (dht.values.humidity > 0 && dht.values.humidity < 100 && dht.values.temperature > -30 &&
+                dht.values.temperature < 30)
+                *heatIndex = dht.computeHeatIndex(dht.values.temperature, dht.values.humidity);
+            return 1;
+        }
+    }
+    Serial.println("Failed to read DHT heat index");
+    return 0;
 }
 
 void readDHT(float *temperature, float *humidity) {

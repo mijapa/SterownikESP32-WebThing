@@ -45,5 +45,5 @@ void loop() {
     printAllTouch();
     loopAnalogRead();
     loopDallas();
-    updatePID(readThermocouple(), readHeatIndex());
+    updatePID();
 }
