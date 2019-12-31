@@ -3,6 +3,6 @@
 
 #endif //STEROWNIKESP32_WEBTHING_ANALOGREAD_H
 
-void loopAnalogRead();
+void printAnalogReads();
 
 int analogRead2();

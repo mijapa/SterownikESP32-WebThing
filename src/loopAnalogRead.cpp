@@ -5,7 +5,7 @@
 #define MEASURE_PIN2 34 //UPS2
 #define MEASURE_PIN3 32 //Fireplace
 
-void loopAnalogRead() {
+void printAnalogReads() {
     Serial.print("Analog read: ");
     Serial.print(analogRead(MEASURE_PIN1));
     Serial.print(" ");

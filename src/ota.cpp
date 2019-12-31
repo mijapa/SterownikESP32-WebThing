@@ -1,5 +1,10 @@
 #include <ArduinoOTA.h>
 
+void handleOTA() {
+    ArduinoOTA.handle();
+    Serial.println("OTA handled");
+}
+
 void setupOTA() {
     // Port defaults to 8266
     // ArduinoOTA.setPort(8266);
@@ -33,9 +38,4 @@ void setupOTA() {
     Serial.println("OTA ready");
     Serial.print("IP address: ");
     Serial.println(WiFi.localIP());
-}
-
-void handleOTA() {
-    ArduinoOTA.handle();
-    Serial.println("OTA handled");
 }

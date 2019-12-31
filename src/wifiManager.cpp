@@ -21,12 +21,6 @@ void configModeCallback(AsyncWiFiManager *myWiFiManager) {
 }
 
 void setupWiFi() {
-
-    pinMode(BUILTIN_LED, OUTPUT);
-    digitalWrite(BUILTIN_LED, HIGH);
-    Serial.begin(115200);
-
-
     //WiFiManager
     //Local intialization. Once its business is done, there is no need to keep it around
     AsyncWebServer server(80);
@@ -46,8 +40,8 @@ void setupWiFi() {
     //and goes into a blocking loop awaiting configuration
     if (!wifiManager.autoConnect()) {
         ledTicker.detach();
+        Serial.println("failed to connect and hit timeout");
         return;
-//        Serial.println("failed to connect and hit timeout");
 //        //reset and try again, or maybe put it to deep sleep
 //        ESP.restart();
 //        delay(1000);
@@ -58,15 +52,6 @@ void setupWiFi() {
     Serial.println(WiFi.BSSIDstr());
     Serial.print("IP address: ");
     Serial.println(WiFi.localIP());
-
-//    if (MDNS.begin("esp32")) {// Start the mDNS responder for esp8266.local
-//        MDNS.addService("http", "tcp", 80);
-//        MDNS.addServiceTxt("http", "tcp", "url", "http://esp32.local");
-//        MDNS.addServiceTxt("http", "tcp", "webthing", "true");
-//        Serial.println("MDNS responder started");
-//    } else {
-//        Serial.println("Error setting up MDNS responder!");
-//    }
     ledTicker.detach();
 }
 

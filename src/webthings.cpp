@@ -13,39 +13,22 @@ ThingProperty thermocoupleSensorProperty("temperature", "Temperature", NUMBER, "
 
 const char *pidSensorTypes[] = {"MultiLevelSensor", "Sensor", nullptr};
 ThingDevice pidSensor("pid", "PID servo regulation", pidSensorTypes);
-ThingProperty pidSensorProperty("servo", "Servo regulating stove air inlet", NUMBER, "LevelProperty");
-ThingProperty pidSetpointProperty("thermo_setpoint", "Chimney temperature set point", NUMBER, "LevelProperty");
+ThingProperty pidServoProperty("servo", "Servo regulating stove air inlet", NUMBER, "LevelProperty");
+ThingProperty pidSetpointChimneyProperty("chimney_setpoint", "Chimney temperature set point", NUMBER,
+                                         "TemperatureProperty");
+ThingProperty pidSetpointRoomProperty("room_setpoint", "Room temperature set point", NUMBER, "TemperatureProperty");
 
-void setupWebThing() {
-    if (WiFi.localIP()) {
-        adapter = new WebThingAdapter("ESP32", WiFi.localIP());
-
-        dhtSensor.addProperty(&tempSensorProperty);
-        dhtSensor.addProperty(&humiditySensorProperty);
-        adapter->addDevice(&dhtSensor);
-
-        thermocoupleSensor.addProperty(&thermocoupleSensorProperty);
-        adapter->addDevice(&thermocoupleSensor);
-
-        pidSensor.addProperty(&pidSensorProperty);
-        pidSensor.addProperty(&pidSetpointProperty);
-        adapter->addDevice(&pidSensor);
-
-        adapter->begin();
-        Serial.println("HTTP server started");
-        Serial.print("http://");
-        Serial.print(WiFi.localIP());
-        Serial.print("/things/");
-        Serial.println(dhtSensor.id);
-    } else {
-        Serial.println("No local IP");
-    }
-}
-
-void updateWebThing(double temp, double hum, double thermocouple) {
+int isAdapterPresent() {
     if (!adapter) {
         Serial.println("No WebThing adapter, resetup");
         setupWebThing();
+        return 0;
+    }
+    return 1;
+}
+
+void updateWebThing(double temp, double hum, double thermocouple) {
+    if (!isAdapterPresent()) {
         return;
     }
     ThingPropertyValue value;
@@ -60,11 +43,43 @@ void updateWebThing(double temp, double hum, double thermocouple) {
     adapter->update();
 }
 
-void updatePIDWebThing(double servo, double setpoint2) {
+void setupWebThing() {
+    if (WiFi.localIP()) {
+        adapter = new WebThingAdapter("ESP32", WiFi.localIP());
+
+        dhtSensor.addProperty(&tempSensorProperty);
+        dhtSensor.addProperty(&humiditySensorProperty);
+        adapter->addDevice(&dhtSensor);
+
+        thermocoupleSensor.addProperty(&thermocoupleSensorProperty);
+        adapter->addDevice(&thermocoupleSensor);
+
+        pidSensor.addProperty(&pidServoProperty);
+        pidSensor.addProperty(&pidSetpointChimneyProperty);
+        pidSensor.addProperty(&pidSetpointRoomProperty);
+        adapter->addDevice(&pidSensor);
+
+        adapter->begin();
+        Serial.println("HTTP server started");
+        Serial.print("http://");
+        Serial.print(WiFi.localIP());
+        Serial.print("/things/");
+        Serial.println(dhtSensor.id);
+    } else {
+        Serial.println("No local IP");
+    }
+}
+
+void updatePIDWebThing(double servo, double setpointChimney, double setpointRoom) {
+    if (!isAdapterPresent()) {
+        return;
+    }
     ThingPropertyValue value;
     value.number = servo;
-    pidSensorProperty.setValue(value);
-    value.number = setpoint2;
-    pidSensorProperty.setValue(value);
+    pidServoProperty.setValue(value);
+    value.number = setpointChimney;
+    pidSetpointChimneyProperty.setValue(value);
+    value.number = setpointRoom;
+    pidSetpointRoomProperty.setValue(value);
     adapter->update();
 }

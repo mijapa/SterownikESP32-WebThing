@@ -36,16 +36,12 @@ uint8_t findDevices(OneWire ow, int pin) {
 }
 
 void setupDallas() {
-    // start serial port
-    Serial.println("Dallas Temperature IC Control Library Demo");
-
-//    pinMode(ONE_WIRE_BUS, INPUT_PULLUP);
-
+    Serial.println("Dallas Temperature IC Setup");
     // Start up the library
     sensors.begin();
 }
 
-void loopDallas() {
+void printDallasTemp() {
 //    Serial.println(digitalRead(ONE_WIRE_BUS));
 //    findDevices(oneWire, ONE_WIRE_BUS);
 //    delay(2000);

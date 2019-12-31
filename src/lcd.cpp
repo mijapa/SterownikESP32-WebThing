@@ -9,12 +9,7 @@ int show = -1;
 void setupLCD() {
     int error;
 
-    Serial.begin(115200);
     Serial.println("LCD...");
-
-    // wait on Serial to be available on Leonardo
-    while (!Serial);
-
     Serial.println("Dose: check for LCD");
 
     // See http://playground.arduino.cc/Main/I2cScanner how to test for a I2C device.
@@ -118,12 +113,12 @@ void displayBasic(double Setpoint, double Setpoint2, double hic, double thermoco
     lcd.print(" ");
     lcd.print(hic); //temperatura odczuwalna DHT22
     lcd.print(" ");
-    lcd.print(servoPercentage);//procent otwarcia przepustnicy obliczony na podstawie Output z PID
+    lcd.print(servoPercentage);//procent otwarcia przepustnicy obliczony na podstawie ServoOutput z PID
     lcd.print("   ");
     lcd.setCursor(7, 0);
     lcd.print(" ");
     lcd.print(thermocouple);//temperatura termopara
     lcd.setCursor(0, 0);
-    lcd.print(Setpoint);//Setpoint z PID
+    lcd.print(Setpoint);//ThermoSetpoint z PID
     lcd.print(" ");
 }

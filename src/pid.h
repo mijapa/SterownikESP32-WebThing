@@ -3,6 +3,6 @@
 
 #endif //STEROWNIKESP32_WEBTHING_PID_H
 
-void setupPID();
+void setupPIDs();
 
-void updatePID();
+void calculatePIDs();

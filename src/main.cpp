@@ -14,20 +14,17 @@
 #include "servo.h"
 
 void setup() {
-    setupLCD();
-    set_servo_at_begining();
-    toneHello();
-    setupDHT();
-
     Serial.begin(115200);
     pinMode(BUILTIN_LED, OUTPUT);
     digitalWrite(BUILTIN_LED, HIGH);
 
-    setupW5500();
+    setupLCD();
+//    toneHello();
+    setupDHT();
+//    setupW5500();
     setupWiFi();
     setupOTA();
-    handleOTA();
-    setupPID();
+    setupPIDs();
     setupWebThing();
     setupDallas();
     setupTouch();
@@ -35,6 +32,7 @@ void setup() {
 
 void loop() {
     Serial.println("LOOP");
+    handleOTA();
 
     updateWebThing(readDHTtemp(), readDHThumi(), readThermocouple());
 
@@ -43,7 +41,7 @@ void loop() {
 
     tryConnectWiFi();
     printAllTouch();
-    loopAnalogRead();
-    loopDallas();
-    updatePID();
+    printAnalogReads();
+    printDallasTemp();
+    calculatePIDs();
 }
