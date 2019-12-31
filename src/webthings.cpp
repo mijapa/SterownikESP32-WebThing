@@ -11,7 +11,7 @@ const char *thermocoupleSensorTypes[] = {"TemperatureSensor", "Sensor", nullptr}
 ThingDevice thermocoupleSensor("thermo", "MAX6675 Temperature sensor", thermocoupleSensorTypes);
 ThingProperty thermocoupleSensorProperty("temperature", "Temperature", NUMBER, "TemperatureProperty");
 
-const char *pidSensorTypes[] = {"MultiLevelSensor", "Sensor", nullptr};
+const char *pidSensorTypes[] = {"MultiLevelSensor", "TemperatureSensor", "Sensor", nullptr};
 ThingDevice pidSensor("pid", "PID servo regulation", pidSensorTypes);
 ThingProperty pidServoProperty("servo", "Servo regulating stove air inlet", NUMBER, "LevelProperty");
 ThingProperty pidSetpointChimneyProperty("chimney_setpoint", "Chimney temperature set point", NUMBER,
@@ -54,6 +54,7 @@ void setupWebThing() {
         thermocoupleSensor.addProperty(&thermocoupleSensorProperty);
         adapter->addDevice(&thermocoupleSensor);
 
+        pidServoProperty.unit = "percent";
         pidSensor.addProperty(&pidServoProperty);
         pidSensor.addProperty(&pidSetpointChimneyProperty);
         pidSensor.addProperty(&pidSetpointRoomProperty);
@@ -82,4 +83,10 @@ void updatePIDWebThing(double servo, double setpointChimney, double setpointRoom
     value.number = setpointRoom;
     pidSetpointRoomProperty.setValue(value);
     adapter->update();
+}
+
+double readSetpointRoomTempFromGateway() {
+    double setpointRoomTempFromGateway = pidSetpointRoomProperty.getValue().number;
+    Serial.println(setpointRoomTempFromGateway);
+    return setpointRoomTempFromGateway;
 }
