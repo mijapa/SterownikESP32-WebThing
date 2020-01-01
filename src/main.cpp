@@ -18,6 +18,8 @@ void setup() {
     pinMode(BUILTIN_LED, OUTPUT);
     digitalWrite(BUILTIN_LED, HIGH);
 
+    set_servo_at_begining();
+
     setupLCD();
 //    toneHello();
     setupDHT();

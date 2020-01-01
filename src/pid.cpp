@@ -101,10 +101,14 @@ void computeServoPoition() {
 }
 
 void changeRoomTempSetpoint(double newRoomTempSetpoint) {
+    if (newRoomTempSetpoint == 0) {
+        return;
+    }
     RoomTempSetpoint = newRoomTempSetpoint;
 }
 
 void calculatePIDs() {
+    changeRoomTempSetpoint(readSetpointRoomTempFromGateway());
     computeThermoSetpoint();
     computeServoPoition();
 
@@ -115,5 +119,4 @@ void calculatePIDs() {
     displayBasic(ThermoSetpoint, RoomTempSetpoint, RoomTempInput, ThermoInput,
                  servoPercentage);
     updatePIDWebThing(servoPercentage, ThermoSetpoint, RoomTempSetpoint);
-    changeRoomTempSetpoint(readSetpointRoomTempFromGateway());
 }

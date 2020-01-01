@@ -11,12 +11,12 @@ const char *thermocoupleSensorTypes[] = {"TemperatureSensor", "Sensor", nullptr}
 ThingDevice thermocoupleSensor("thermo", "MAX6675 Temperature sensor", thermocoupleSensorTypes);
 ThingProperty thermocoupleSensorProperty("temperature", "Temperature", NUMBER, "TemperatureProperty");
 
-const char *pidSensorTypes[] = {"MultiLevelSensor", "TemperatureSensor", "Sensor", nullptr};
+const char *pidSensorTypes[] = {"Thermostat", "MultiLevelSensor", "TemperatureSensor", "Sensor", nullptr};
 ThingDevice pidSensor("pid", "PID servo regulation", pidSensorTypes);
-ThingProperty pidServoProperty("servo", "Servo regulating stove air inlet", NUMBER, "LevelProperty");
-ThingProperty pidSetpointChimneyProperty("chimney_setpoint", "Chimney temperature set point", NUMBER,
+ThingProperty pidServoProperty("servo", "Servo regulation", NUMBER, "LevelProperty");
+ThingProperty pidSetpointChimneyProperty("chimney_setpoint", "Chimney setpoint", NUMBER,
                                          "TemperatureProperty");
-ThingProperty pidSetpointRoomProperty("room_setpoint", "Room temperature set point", NUMBER, "TemperatureProperty");
+ThingProperty pidSetpointRoomProperty("room_setpoint", "Room setpoint", NUMBER, "TargetTemperatureProperty");
 
 int isAdapterPresent() {
     if (!adapter) {
@@ -48,6 +48,8 @@ void setupWebThing() {
         adapter = new WebThingAdapter("ESP32", WiFi.localIP());
 
         dhtSensor.addProperty(&tempSensorProperty);
+        humiditySensorProperty.unit = "percent";
+        humiditySensorProperty.readOnly = "true";
         dhtSensor.addProperty(&humiditySensorProperty);
         adapter->addDevice(&dhtSensor);
 
@@ -55,12 +57,16 @@ void setupWebThing() {
         adapter->addDevice(&thermocoupleSensor);
 
         pidServoProperty.unit = "percent";
+        pidServoProperty.readOnly = "true";
+        pidServoProperty.description = "Servo";
         pidSensor.addProperty(&pidServoProperty);
         pidSensor.addProperty(&pidSetpointChimneyProperty);
+        pidSetpointRoomProperty.unit = "celsius";
         pidSensor.addProperty(&pidSetpointRoomProperty);
         adapter->addDevice(&pidSensor);
 
         adapter->begin();
+
         Serial.println("HTTP server started");
         Serial.print("http://");
         Serial.print(WiFi.localIP());
@@ -86,6 +92,10 @@ void updatePIDWebThing(double servo, double setpointChimney, double setpointRoom
 }
 
 double readSetpointRoomTempFromGateway() {
+    if (!isAdapterPresent()) {
+        return 0;
+    }
+    adapter->update();
     double setpointRoomTempFromGateway = pidSetpointRoomProperty.getValue().number;
     Serial.println(setpointRoomTempFromGateway);
     return setpointRoomTempFromGateway;
