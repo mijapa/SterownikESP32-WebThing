@@ -1,0 +1,11 @@
+Replace
+#include <util/delay.h>
+to
+#define _delay_ms(ms) delayMicroseconds((ms) * 1000)
+in
+.pio/libdeps/esp32doit-devkit-v1/MAX6675 library_ID558/max6675.cpp
+
+Change line 274 to
+DynamicJsonDocument buf(4096);
+in
+.pio/libdeps/esp32doit-devkit-v1/webthing-arduino_ID5397/ESPWebThingAdapter.h
