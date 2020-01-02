@@ -20,6 +20,7 @@ void print(){
     printAllTouch();
     printAnalogReads();
     printDallasTemp();
+    printAllPid();
     Serial.println("\n");
 }
 
@@ -47,7 +48,7 @@ void loop() {
     handleOTA();
 
     updateWebThing(readDHTtemp(), readDHThumi(), readThermocouple());
-    delay(100);
+    delay(500);
 
     tryConnectWiFi();
 

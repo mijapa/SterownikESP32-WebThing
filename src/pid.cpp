@@ -72,6 +72,9 @@ void computeThermoSetpoint() {
     RoomTempInput *= 100;
     RoomTempInput = (int) RoomTempInput;
     RoomTempInput /= 100;
+    RoomTempSetpoint *= 100;
+    RoomTempSetpoint = (int)RoomTempSetpoint;
+    RoomTempSetpoint /= 100;
 
 //    Serial.println(RoomTempInput);
 //    Serial.println(ThermoSetpointOutput);
@@ -126,4 +129,19 @@ void calculatePIDs() {
     displayBasic(ThermoSetpoint, RoomTempSetpoint, RoomTempInput, ThermoInput,
                  servoPercentage);
     updatePIDWebThing(servoPercentage, ThermoSetpoint, RoomTempSetpoint, ThermoInput, RoomTempInput);
+}
+
+void printAllPid(){
+    Serial.print("servoPercentage: ");
+    int servoPercentage = map(ServoOutput, SERVO_ZAMKN_MAX, SERVO_ZAMKN_MIN, 0, 100);
+    Serial.println(servoPercentage);
+    Serial.print("thermoSetpoint: ");
+    Serial.print(ThermoSetpoint);
+    Serial.print(" ,thermoInput: ");
+    Serial.println(ThermoInput);
+
+    Serial.print("roomSetpoint: ");
+    Serial.print(RoomTempSetpoint);
+    Serial.print(" ,roomInput: ");
+    Serial.println(RoomTempInput);
 }
