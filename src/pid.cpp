@@ -16,6 +16,7 @@
 #define CZAS_ROZPALANIA 1200000 //czas rozpalania w milisekundach
 #define TEMP_ZAD_MAX 360 //zdefinioweanie zakresu temperatur termopara w kominie
 #define TEMP_ZAD_MIN 240
+#define SMALL_DIFF 10
 
 int dystansPid = 30;// do przełączania agresywny/łagodnie sterowanie
 double ThermoSetpoint, ThermoInput, ServoOutput; //Define Variables we'll be connecting to
@@ -43,7 +44,7 @@ void setupServoPID() {
     ThermoSetpoint = SERVO_ZAMKN_MAX;
     servoPID.SetSampleTime(3000); //determines how often the PID algorithm evaluates
     servoPID.SetOutputLimits(SERVO_ZAMKN_MIN,
-                             SERVO_ZAMKN_MAX - 10); //zakres wyjściowy, większy parametr serva większe zamknięcie
+                             SERVO_ZAMKN_MAX - SMALL_DIFF); //zakres wyjściowy, większy parametr serva większe zamknięcie
     servoPID.SetControllerDirection(
             REVERSE); //wybranie trybu pracy DIRECT/REVERSE (reverse - aby input wzrósł output musi zmaleć)
     servoPID.SetMode(AUTOMATIC);//turn the PID on
@@ -53,6 +54,13 @@ void setupServoPID() {
 void setupPIDs() {
     setupServoPID();
     setupThermoPID();
+}
+
+void checkComputedServoPos(){
+    if(ServoOutput<0 || ServoOutput > 100) {
+        Serial.println("WRONG COMPUTED SERVO POS");
+        ServoOutput = SERVO_ZAMKN_MAX - SMALL_DIFF;
+    }
 }
 
 void computeThermoSetpoint() {
@@ -97,7 +105,7 @@ void computeServoPoition() {
 //        servoPID.SetTunings(aggKp, aggKi, aggKd);//we're far from setpoint, use aggressive tuning parameters
 //    }
     servoPID.Compute();//obliczanie PID
-
+    checkComputedServoPos();
 }
 
 void changeRoomTempSetpoint(double newRoomTempSetpoint) {
