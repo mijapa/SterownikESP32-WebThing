@@ -20,7 +20,7 @@ int readDhtHeatIndex(double *heatIndex) {
             return 1;
         }
     }
-    Serial.println("Failed to read DHT heat index");
+    Serial.println("FAILED TO READ DHT HEAT INDEX!!");
     return 0;
 }
 
