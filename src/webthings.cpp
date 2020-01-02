@@ -26,7 +26,9 @@ ThingProperty pidSetpointChimneyProperty("chimney_setpoint", "Chimney Setpoint",
 ThingProperty pidChimneyTempProperty("chimney_temp", "Chimney Temperature", NUMBER,
                                      "TemperatureProperty");
 
-Ticker updateTicker;
+const char *dallasSensorTypes[] = {"TemperatureSensor", "Sensor", nullptr};
+ThingDevice dallasSensor("dallas", "Dallas Temperature sensor", dallasSensorTypes);
+ThingProperty dallasProperty("dallas", "Dallas temperature", NUMBER, "TemperatureProperty");
 
 int isAdapterPresent() {
     if (!adapter) {
@@ -44,16 +46,13 @@ void updateWebThing(double temp, double hum, double thermocouple) {
     ThingPropertyValue value;
     value.number = temp;
     tempSensorProperty.setValue(value);
-    pidRoomTemperatureProperty.setValue(value);
+    adapter->update();
     value.number = hum;
     humiditySensorProperty.setValue(value);
+    adapter->update();
 
     value.number = thermocouple;
     thermocoupleSensorProperty.setValue(value);
-    pidChimneyTempProperty.setValue(value);
-}
-
-void adapterUpdate(){
     adapter->update();
 }
 
@@ -119,20 +118,28 @@ void setupWebThing() {
     } else {
         Serial.println("No local IP");
     }
-    updateTicker.attach_ms(100, adapterUpdate);
 }
 
-void updatePIDWebThing(double servo, double setpointChimney, double setpointRoom) {
+void updatePIDWebThing(double servo, double setpointChimney, double setpointRoom, double tempChimney, double tempRoom) {
     if (!isAdapterPresent()) {
         return;
     }
     ThingPropertyValue value;
     value.number = servo;
     pidServoProperty.setValue(value);
+    adapter->update();
     value.number = setpointChimney;
     pidSetpointChimneyProperty.setValue(value);
+    adapter->update();
     value.number = setpointRoom;
     pidSetpointRoomProperty.setValue(value);
+    adapter->update();
+    value.number = tempChimney;
+    pidChimneyTempProperty.setValue(value);
+    adapter->update();
+    value.number = tempRoom;
+    pidRoomTemperatureProperty.setValue(value);
+    adapter->update();
 }
 
 double readSetpointRoomTempFromGateway() {

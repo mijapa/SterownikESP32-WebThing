@@ -125,5 +125,5 @@ void calculatePIDs() {
     int servoPercentage = map(ServoOutput, SERVO_ZAMKN_MAX, SERVO_ZAMKN_MIN, 0, 100);
     displayBasic(ThermoSetpoint, RoomTempSetpoint, RoomTempInput, ThermoInput,
                  servoPercentage);
-    updatePIDWebThing(servoPercentage, ThermoSetpoint, RoomTempSetpoint);
+    updatePIDWebThing(servoPercentage, ThermoSetpoint, RoomTempSetpoint, ThermoInput, RoomTempInput);
 }
