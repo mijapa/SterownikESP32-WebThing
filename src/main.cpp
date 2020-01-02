@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <Ticker.h>
 #include "wifiManager.h"
 #include "dht.h"
 #include "webthings.h"
@@ -12,6 +13,15 @@
 #include "loopAnalogRead.h"
 #include "dallas.h"
 #include "servo.h"
+
+Ticker printTicker;
+
+void print(){
+    printAllTouch();
+    printAnalogReads();
+    printDallasTemp();
+    Serial.println("\n");
+}
 
 void setup() {
     Serial.begin(115200);
@@ -30,20 +40,16 @@ void setup() {
     setupWebThing();
     setupDallas();
     setupTouch();
+    printTicker.attach(5, print);
 }
 
 void loop() {
-    Serial.println("LOOP");
     handleOTA();
 
     updateWebThing(readDHTtemp(), readDHThumi(), readThermocouple());
-
-    Serial.print("\n\n");
-    delay(1000);
+    delay(100);
 
     tryConnectWiFi();
-    printAllTouch();
-    printAnalogReads();
-    printDallasTemp();
+
     calculatePIDs();
 }

@@ -121,8 +121,7 @@ void calculatePIDs() {
     computeServoPoition();
 
     set_servo_new_pos(ServoOutput);//przekazanie obliczonej pozycji do zmiennej serva
-    Serial.print("ThermoSetpoint: ");
-    Serial.println(ThermoSetpoint);
+
     int servoPercentage = map(ServoOutput, SERVO_ZAMKN_MAX, SERVO_ZAMKN_MIN, 0, 100);
     displayBasic(ThermoSetpoint, RoomTempSetpoint, RoomTempInput, ThermoInput,
                  servoPercentage);

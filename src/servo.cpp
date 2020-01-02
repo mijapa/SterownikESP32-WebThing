@@ -26,6 +26,9 @@ void set_servo_at_begining() {
 }
 
 void write_pos(int pos) {
+    Serial.print("Writing new servo pos: ");
+    Serial.println(pos);
+    ledcAttachPin(SERVO_PIN, 5);
     myservo.write(pos);
     if (abs(pos - oldPos) < SMALL_POS_DIFF) {
         detachTicker.once_ms(200, servoDetach);

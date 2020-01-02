@@ -17,8 +17,6 @@ double readThermocouple() {
         Serial.println("FAILED TO READ THERMOCOUPLE!!");
         return 999; //returning high temperature to prevent overheat
     }
-    Serial.print("Termocouple: ");
-    Serial.println(temp);
     lastTemp = temp;
     return temp;
 }

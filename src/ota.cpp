@@ -1,8 +1,20 @@
 #include <ArduinoOTA.h>
+#include <Ticker.h>
+
+Ticker otaPrintTicker;
+boolean print = true;
+
+void printTrue(){
+    print = true;
+}
 
 void handleOTA() {
     ArduinoOTA.handle();
-    Serial.println("OTA handled");
+    if(print){
+        Serial.println("OTA handled");
+        print = false;
+        otaPrintTicker.once(5, printTrue);
+    }
 }
 
 void setupOTA() {

@@ -1,4 +1,5 @@
 #include <WebThingAdapter.h>
+#include <Ticker.h>
 #include "webthings.h"
 
 WebThingAdapter *adapter;
@@ -25,6 +26,8 @@ ThingProperty pidSetpointChimneyProperty("chimney_setpoint", "Chimney Setpoint",
 ThingProperty pidChimneyTempProperty("chimney_temp", "Chimney Temperature", NUMBER,
                                      "TemperatureProperty");
 
+Ticker updateTicker;
+
 int isAdapterPresent() {
     if (!adapter) {
         Serial.println("No WebThing adapter, resetup");
@@ -48,7 +51,9 @@ void updateWebThing(double temp, double hum, double thermocouple) {
     value.number = thermocouple;
     thermocoupleSensorProperty.setValue(value);
     pidChimneyTempProperty.setValue(value);
+}
 
+void adapterUpdate(){
     adapter->update();
 }
 
@@ -84,7 +89,7 @@ void setupWebThing() {
         ThingPropertyValue value;
         value.string = &mode;
         pidHeatingCoolingProperty.setValue(value);
-        pidHeatingCoolingProperty.propertyEnum = heatingCoolingSuportStates;
+//        pidHeatingCoolingProperty.propertyEnum = heatingCoolingSuportStates;
         pidHeatingCoolingProperty.title = "Driver Mode";
         pidSensor.addProperty(&pidHeatingCoolingProperty);
 
@@ -114,6 +119,7 @@ void setupWebThing() {
     } else {
         Serial.println("No local IP");
     }
+    updateTicker.attach_ms(100, adapterUpdate);
 }
 
 void updatePIDWebThing(double servo, double setpointChimney, double setpointRoom) {
@@ -127,15 +133,12 @@ void updatePIDWebThing(double servo, double setpointChimney, double setpointRoom
     pidSetpointChimneyProperty.setValue(value);
     value.number = setpointRoom;
     pidSetpointRoomProperty.setValue(value);
-    adapter->update();
 }
 
 double readSetpointRoomTempFromGateway() {
     if (!isAdapterPresent()) {
         return 0;
     }
-    adapter->update();
     double setpointRoomTempFromGateway = pidSetpointRoomProperty.getValue().number;
-    Serial.println(setpointRoomTempFromGateway);
     return setpointRoomTempFromGateway;
 }
