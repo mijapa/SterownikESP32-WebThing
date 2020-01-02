@@ -14,9 +14,16 @@ ThingProperty thermocoupleSensorProperty("temperature", "Temperature", NUMBER, "
 const char *pidSensorTypes[] = {"Thermostat", "MultiLevelSensor", "TemperatureSensor", "Sensor", nullptr};
 ThingDevice pidSensor("pid", "PID servo regulation", pidSensorTypes);
 ThingProperty pidServoProperty("servo", "Servo regulation", NUMBER, "LevelProperty");
-ThingProperty pidSetpointChimneyProperty("chimney_setpoint", "Chimney setpoint", NUMBER,
+ThingProperty pidRoomTemperatureProperty("room_temp", "Room Temperature", NUMBER,
                                          "TemperatureProperty");
-ThingProperty pidSetpointRoomProperty("room_setpoint", "Room setpoint", NUMBER, "TargetTemperatureProperty");
+ThingProperty pidSetpointRoomProperty("room_setpoint", "Room Setpoint", NUMBER, "TargetTemperatureProperty");
+ThingProperty pidHeatingCoolingProperty("on_off", "Fire", STRING, "HeatingCoolingProperty");
+const char *heatingCoolingSuportStates[] = {"off", "heating"};
+String mode = "heating";
+ThingProperty pidSetpointChimneyProperty("chimney_setpoint", "Chimney Setpoint", NUMBER,
+                                         "TemperatureProperty");
+ThingProperty pidChimneyTempProperty("chimney_temp", "Chimney Temperature", NUMBER,
+                                     "TemperatureProperty");
 
 int isAdapterPresent() {
     if (!adapter) {
@@ -34,11 +41,13 @@ void updateWebThing(double temp, double hum, double thermocouple) {
     ThingPropertyValue value;
     value.number = temp;
     tempSensorProperty.setValue(value);
+    pidRoomTemperatureProperty.setValue(value);
     value.number = hum;
     humiditySensorProperty.setValue(value);
 
     value.number = thermocouple;
     thermocoupleSensorProperty.setValue(value);
+    pidChimneyTempProperty.setValue(value);
 
     adapter->update();
 }
@@ -47,23 +56,53 @@ void setupWebThing() {
     if (WiFi.localIP()) {
         adapter = new WebThingAdapter("ESP32", WiFi.localIP());
 
+        tempSensorProperty.multipleOf = 0.1;
         dhtSensor.addProperty(&tempSensorProperty);
         humiditySensorProperty.unit = "percent";
         humiditySensorProperty.readOnly = "true";
+        humiditySensorProperty.multipleOf = 0.1;
+        humiditySensorProperty.title = "Humidity";
         dhtSensor.addProperty(&humiditySensorProperty);
+
         adapter->addDevice(&dhtSensor);
 
+
         thermocoupleSensor.addProperty(&thermocoupleSensorProperty);
+
         adapter->addDevice(&thermocoupleSensor);
+
+
+        pidRoomTemperatureProperty.title = "Room Temperature";
+        pidRoomTemperatureProperty.multipleOf = 0.1;
+        pidSensor.addProperty(&pidRoomTemperatureProperty);
+
+        pidSetpointRoomProperty.unit = "celsius";
+        pidSetpointRoomProperty.multipleOf = 0.1;
+        pidSetpointRoomProperty.title = "Room Temperature Setpoint";
+        pidSensor.addProperty(&pidSetpointRoomProperty);
+
+        ThingPropertyValue value;
+        value.string = &mode;
+        pidHeatingCoolingProperty.setValue(value);
+        pidHeatingCoolingProperty.propertyEnum = heatingCoolingSuportStates;
+        pidHeatingCoolingProperty.title = "Driver Mode";
+        pidSensor.addProperty(&pidHeatingCoolingProperty);
+
+        pidChimneyTempProperty.title = "Chimney Temperature";
+        pidChimneyTempProperty.multipleOf = 0.1;
+        pidSensor.addProperty(&pidChimneyTempProperty);
+
+        pidSetpointChimneyProperty.title = "Chimney Temperature Setpoint";
+        pidSensor.addProperty(&pidSetpointChimneyProperty);
 
         pidServoProperty.unit = "percent";
         pidServoProperty.readOnly = "true";
-        pidServoProperty.description = "Servo";
+        pidServoProperty.multipleOf = 0.1;
+        pidServoProperty.title = "Air inlet";
         pidSensor.addProperty(&pidServoProperty);
-        pidSensor.addProperty(&pidSetpointChimneyProperty);
-        pidSetpointRoomProperty.unit = "celsius";
-        pidSensor.addProperty(&pidSetpointRoomProperty);
+
         adapter->addDevice(&pidSensor);
+
 
         adapter->begin();
 
