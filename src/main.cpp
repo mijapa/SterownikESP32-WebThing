@@ -32,13 +32,13 @@ void setup() {
     set_servo_at_begining();
 
     setupLCD();
-//    toneHello();
+    toneHello();
     setupDHT();
-//    setupW5500();
+    setupW5500();
     setupWiFi();
     setupOTA();
-    setupPIDs();
     setupWebThing();
+    setupPIDs();
     setupDallas();
     setupTouch();
     printTicker.attach(5, print);

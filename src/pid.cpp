@@ -54,6 +54,7 @@ void setupServoPID() {
 void setupPIDs() {
     setupServoPID();
     setupThermoPID();
+    setWebThingRoomSetpoint(RoomTempSetpoint_START);
 }
 
 void checkComputedServoPos(){

@@ -118,6 +118,12 @@ void setupWebThing() {
         Serial.println("No local IP");
     }
 }
+void setWebThingRoomSetpoint(double setpointRoom){
+    ThingPropertyValue value;
+    value.number = setpointRoom;
+    pidSetpointRoomProperty.setValue(value);
+    adapter->update();
+}
 
 void updatePIDWebThing(double servo, double setpointChimney, double setpointRoom, double tempChimney, double tempRoom) {
     if (!isAdapterPresent()) {
@@ -129,9 +135,6 @@ void updatePIDWebThing(double servo, double setpointChimney, double setpointRoom
     adapter->update();
     value.number = setpointChimney;
     pidSetpointChimneyProperty.setValue(value);
-    adapter->update();
-    value.number = setpointRoom;
-    pidSetpointRoomProperty.setValue(value);
     adapter->update();
     value.number = tempChimney;
     pidChimneyTempProperty.setValue(value);
