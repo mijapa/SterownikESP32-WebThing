@@ -50,7 +50,6 @@ void updateWebThing(double temp, double hum, double thermocouple) {
     value.number = hum;
     humiditySensorProperty.setValue(value);
     adapter->update();
-
     value.number = thermocouple;
     thermocoupleSensorProperty.setValue(value);
     adapter->update();
@@ -82,18 +81,18 @@ void setupWebThing() {
 
         pidSetpointRoomProperty.unit = "celsius";
         pidSetpointRoomProperty.multipleOf = 0.1;
+        pidSetpointRoomProperty.minimum = 18;
+        pidSetpointRoomProperty.maximum = 22;
         pidSetpointRoomProperty.title = "Room Temperature Setpoint";
         pidSensor.addProperty(&pidSetpointRoomProperty);
 
         ThingPropertyValue value;
         value.string = &mode;
         pidHeatingCoolingProperty.setValue(value);
-//        pidHeatingCoolingProperty.propertyEnum = heatingCoolingSuportStates;
         pidHeatingCoolingProperty.title = "Driver Mode";
         pidSensor.addProperty(&pidHeatingCoolingProperty);
 
         pidChimneyTempProperty.title = "Chimney Temperature";
-        pidChimneyTempProperty.multipleOf = 0.1;
         pidSensor.addProperty(&pidChimneyTempProperty);
 
         pidSetpointChimneyProperty.title = "Chimney Temperature Setpoint";
