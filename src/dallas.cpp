@@ -1,7 +1,9 @@
 #include "dallas.h"
+#include "webthings.h"
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <HardwareSerial.h>
+#include <Ticker.h>
 
 #define ONE_WIRE_BUS 3
 
@@ -11,6 +13,8 @@ OneWire oneWire(ONE_WIRE_BUS);
 
 // Pass our oneWire reference to Dallas Temperature.
 DallasTemperature sensors(&oneWire);
+
+Ticker updateTicker;
 
 /*
  * The setup function. We only start the sensors here
@@ -35,10 +39,16 @@ uint8_t findDevices(OneWire ow, int pin) {
     return count;
 }
 
+void update(){
+    sensors.requestTemperatures();
+    updateDallasWebThing(sensors.getTempCByIndex(0));
+}
+
 void setupDallas() {
     Serial.println("Dallas Temperature IC Setup");
     // Start up the library
     sensors.begin();
+    updateTicker.attach_ms(500, update);
 }
 
 void printDallasTemp() {

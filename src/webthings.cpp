@@ -106,6 +106,12 @@ void setupWebThing() {
 
         adapter->addDevice(&pidSensor);
 
+        dallasProperty.multipleOf = 0.1;
+        dallasProperty.title = "Inside temperature";
+        dallasSensor.addProperty(&dallasProperty);
+
+        adapter->addDevice(&dallasSensor);
+
 
         adapter->begin();
 
@@ -141,6 +147,13 @@ void updatePIDWebThing(double servo, double setpointChimney, double setpointRoom
     adapter->update();
     value.number = tempRoom;
     pidRoomTemperatureProperty.setValue(value);
+    adapter->update();
+}
+
+void updateDallasWebThing(double temp){
+    ThingPropertyValue value;
+    value.number = temp;
+    dallasProperty.setValue(value);
     adapter->update();
 }
 

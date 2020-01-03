@@ -11,3 +11,5 @@ void updatePIDWebThing(double servo, double setpointChimney, double setpointRoom
 double readSetpointRoomTempFromGateway();
 
 void setWebThingRoomSetpoint(double setpointRoom);
+
+void updateDallasWebThing(double temp);
