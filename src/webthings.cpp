@@ -30,6 +30,14 @@ const char *dallasSensorTypes[] = {"TemperatureSensor", "Sensor", nullptr};
 ThingDevice dallasSensor("dallas", "Dallas Temperature sensor", dallasSensorTypes);
 ThingProperty dallasProperty("dallas", "Dallas temperature", NUMBER, "TemperatureProperty");
 
+const char *touchSensorTypes[] = {"OnOffSwitch", "Sensor", nullptr};
+ThingDevice touchSensor("touch", "Touch Sensor", touchSensorTypes);
+ThingProperty UPtouchProperty("up_touch", "UP", BOOLEAN, "OnOffSwitch");
+ThingProperty DOWNtouchProperty("down_touch", "DOWN", BOOLEAN, "OnOffSwitch");
+ThingProperty LEFTtouchProperty("left_touch", "LEFT", BOOLEAN, "OnOffSwitch");
+ThingProperty RIGHTtouchProperty("right_touch", "RIGHT", BOOLEAN, "OnOffSwitch");
+ThingProperty MIDDLEtouchProperty("middle_touch", "MIDDLE", BOOLEAN, "OnOffSwitch");
+
 int isAdapterPresent() {
     if (!adapter) {
         Serial.println("No WebThing adapter, resetup");
@@ -112,6 +120,22 @@ void setupWebThing() {
 
         adapter->addDevice(&dallasSensor);
 
+        UPtouchProperty.readOnly = true;
+        UPtouchProperty.title = "UP";
+        touchSensor.addProperty(&UPtouchProperty);
+        DOWNtouchProperty.readOnly = true;
+        DOWNtouchProperty.title = "DOWN";
+        touchSensor.addProperty(&DOWNtouchProperty);
+        LEFTtouchProperty.readOnly = true;
+        LEFTtouchProperty.title = "LEFT";
+        touchSensor.addProperty(&LEFTtouchProperty);
+        RIGHTtouchProperty.readOnly = true;
+        RIGHTtouchProperty.title = "RIGHT";
+        touchSensor.addProperty(&RIGHTtouchProperty);
+        MIDDLEtouchProperty.readOnly = true;
+        MIDDLEtouchProperty.title = "MIDDLE";
+        touchSensor.addProperty(&MIDDLEtouchProperty);
+        adapter->addDevice(&touchSensor);
 
         adapter->begin();
 
@@ -124,6 +148,26 @@ void setupWebThing() {
         Serial.println("No local IP");
     }
 }
+
+void updateTouchWebThing(bool up, bool down, bool left, bool right, bool middle){
+    ThingPropertyValue value;
+    value.boolean = up;
+    UPtouchProperty.setValue(value);
+    adapter->update();
+    value.boolean = down;
+    DOWNtouchProperty.setValue(value);
+    adapter->update();
+    value.boolean = left;
+    LEFTtouchProperty.setValue(value);
+    adapter->update();
+    value.boolean = right;
+    RIGHTtouchProperty.setValue(value);
+    adapter->update();
+    value.boolean = middle;
+    MIDDLEtouchProperty.setValue(value);
+    adapter->update();
+}
+
 void setWebThingRoomSetpoint(double setpointRoom){
     ThingPropertyValue value;
     value.number = setpointRoom;
@@ -161,6 +205,7 @@ double readSetpointRoomTempFromGateway() {
     if (!isAdapterPresent()) {
         return 0;
     }
+    adapter->update();
     double setpointRoomTempFromGateway = pidSetpointRoomProperty.getValue().number;
     return setpointRoomTempFromGateway;
 }

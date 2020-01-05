@@ -14,7 +14,9 @@ OneWire oneWire(ONE_WIRE_BUS);
 // Pass our oneWire reference to Dallas Temperature.
 DallasTemperature sensors(&oneWire);
 
-Ticker updateTicker;
+Ticker updateDallasTicker;
+
+double lastDallasTemp = 0;
 
 /*
  * The setup function. We only start the sensors here
@@ -39,16 +41,26 @@ uint8_t findDevices(OneWire ow, int pin) {
     return count;
 }
 
-void update(){
+double getDallasTemp(){
+    double temp = sensors.getTempCByIndex(0);
+    if (temp < -40){
+        Serial.println("FAILURE TO READ DALLAS");
+        return lastDallasTemp;
+    }
+    lastDallasTemp = temp;
+    return temp;
+}
+
+void updateDallas(){
     sensors.requestTemperatures();
-    updateDallasWebThing(sensors.getTempCByIndex(0));
+    updateDallasWebThing(getDallasTemp());
 }
 
 void setupDallas() {
     Serial.println("Dallas Temperature IC Setup");
     // Start up the library
     sensors.begin();
-    updateTicker.attach_ms(500, update);
+    updateDallasTicker.attach_ms(500, updateDallas);
 }
 
 void printDallasTemp() {
@@ -63,6 +75,6 @@ void printDallasTemp() {
     // After we got the temperatures, we can print them here.
     // We use the function ByIndex, and as an example get the temperature from the first sensor only.
     Serial.print("Dallas temperature is: ");
-    Serial.println(sensors.getTempCByIndex(0));
+    Serial.println(getDallasTemp());
 }
 

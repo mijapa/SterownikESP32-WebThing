@@ -1,15 +1,17 @@
 #include <HardwareSerial.h>
 #include <Ticker.h>
 #include "touch.h"
+#include "webthings.h"
 
 #define  TOUCH_PIN1 13
 #define  TOUCH_PIN2 12
 #define  TOUCH_PIN3 14
 #define  TOUCH_PIN4 27
 #define  TOUCH_PIN5 15
-#define TOUCH_THRESHOLD_DIFF 10
+#define TOUCH_THRESHOLD_DIFF 3
 
 Ticker interruptTicker;
+Ticker updateTouchTicker;
 
 uint8_t touch_pin1_threshold = 0;
 uint8_t touch_pin2_threshold = 0;
@@ -37,6 +39,16 @@ void set_threshold() {
 }
 
 void printAllTouchValues() {
+    Serial.print("Touch thresholds: ");
+    Serial.print(touch_pin1_threshold);
+    Serial.print(", ");
+    Serial.print(touch_pin2_threshold);
+    Serial.print(", ");
+    Serial.print(touch_pin3_threshold);
+    Serial.print(", ");
+    Serial.print(touch_pin4_threshold);
+    Serial.print(", ");
+    Serial.println(touch_pin5_threshold);
     Serial.print("Touch sensors: ");
     Serial.print(touchRead(TOUCH_PIN1));
     Serial.print(", ");
@@ -56,8 +68,26 @@ void enable_touch_interrupt() {
 }
 
 void gotTouch() {//callback should be very short
+    Serial.print("Got Touch ##");
     touch_pad_intr_disable();
     interruptTicker.attach_ms(5000, enable_touch_interrupt);
+}
+
+int isTouched(int touchValue, int treshold) {
+    if (touchValue < treshold) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void updateTouch(){
+    bool up = isTouched(touchRead(TOUCH_PIN1), touch_pin1_threshold);
+    bool down = isTouched(touchRead(TOUCH_PIN5), touch_pin5_threshold);
+    bool left = isTouched(touchRead(TOUCH_PIN4), touch_pin4_threshold);
+    bool right = isTouched(touchRead(TOUCH_PIN3), touch_pin3_threshold);
+    bool middle = isTouched(touchRead(TOUCH_PIN2), touch_pin2_threshold);
+    updateTouchWebThing(up, down, left, right, middle);
 }
 
 void setupTouch() {
@@ -67,14 +97,8 @@ void setupTouch() {
 //    touchAttachInterrupt(TOUCH_PIN3, gotTouch, touch_pin3_threshold);
 //    touchAttachInterrupt(TOUCH_PIN4, gotTouch, touch_pin4_threshold);
 //    touchAttachInterrupt(TOUCH_PIN5, gotTouch, touch_pin5_threshold);
-}
+    updateTouchTicker.attach_ms(500, updateTouch);
 
-int isTouched(int touchValue, int treshold) {
-    if (touchValue < treshold) {
-        return true;
-    } else {
-        return false;
-    }
 }
 
 void printAllTouchReadings() {
