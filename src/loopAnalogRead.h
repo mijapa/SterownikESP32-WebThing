@@ -4,5 +4,3 @@
 #endif //STEROWNIKESP32_WEBTHING_ANALOGREAD_H
 
 void printAnalogReads();
-
-int analogRead2();

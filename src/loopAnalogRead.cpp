@@ -13,7 +13,3 @@ void printAnalogReads() {
     Serial.print(" ");
     Serial.println(analogRead(MEASURE_PIN3));
 }
-
-int analogRead2() {
-    return (analogRead(MEASURE_PIN3));
-}

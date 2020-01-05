@@ -7,7 +7,6 @@ Ticker sampler;
 
 void setupDHT() {
     dht.setup(DHTPIN, DHTesp::DHT22);
-//    sampler.attach_ms(dht.getMinimumSamplingPeriod(), sample);
 }
 
 int readDhtHeatIndex(double *heatIndex) {
@@ -40,23 +39,11 @@ void readDHT(float *temperature, float *humidity) {
 }
 
 double readDHTtemp() {
-//    Serial.println("Reading temperature...");
     double temperature = dht.getTemperature();
-//    Serial.println("Status\tTemperature (C)");
-//    Serial.print(dht.getStatusString());
-//    Serial.print("\t\t");
-//    Serial.print(temperature, 1);
-//    Serial.print("\n");
     return temperature;
 }
 
 double readDHThumi() {
-//    Serial.println("Reading humidity...");
     double humidity = dht.getHumidity();
-//    Serial.println("Status\tHumidity (%)");
-//    Serial.print(dht.getStatusString());
-//    Serial.print("\t\t");
-//    Serial.print(humidity, 1);
-//    Serial.print("\n");
     return humidity;
 }

@@ -18,7 +18,6 @@
 #define TEMP_ZAD_MIN 240
 #define SMALL_DIFF 10
 
-int dystansPid = 30;// do przełączania agresywny/łagodnie sterowanie
 double ThermoSetpoint, ThermoInput, ServoOutput; //Define Variables we'll be connecting to
 double RoomTempSetpoint, RoomTempInput, ThermoSetpointOutput; //
 
@@ -77,10 +76,6 @@ void computeThermoSetpoint() {
     RoomTempSetpoint = (int)RoomTempSetpoint;
     RoomTempSetpoint /= 100;
 
-//    Serial.println(RoomTempInput);
-//    Serial.println(ThermoSetpointOutput);
-//    Serial.println(RoomTempSetpoint);
-
     thermoPID2.Compute();//obliczanie PID2
 
 
@@ -97,17 +92,6 @@ void computeServoPoition() {
     ThermoInput = readThermocouple();
     //todo remove - test purpose only
     ThermoInput *= 10;
-//    Serial.println(ThermoInput);
-//    Serial.println(ServoOutput);
-//    Serial.println(ThermoSetpoint);
-
-//    double gap = abs(ThermoSetpoint - ThermoInput); //distance away from setpoint
-//    if (gap < dystansPid) //jeśli dalej od zadanej to agressive, jeśli bliżej conservative
-//    {
-//        servoPID.SetTunings(consKp, consKi, consKd);//we're close to setpoint, use conservative tuning parameters
-//    } else {
-//        servoPID.SetTunings(aggKp, aggKi, aggKd);//we're far from setpoint, use aggressive tuning parameters
-//    }
     servoPID.Compute();//obliczanie PID
     checkComputedServoPos();
 }

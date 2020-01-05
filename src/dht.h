@@ -4,13 +4,9 @@
 
 #define DHTPIN 16 // Pin which is connected to the DHT sensor.
 
-void sample();
-
 void setupDHT();
 
 int readDhtHeatIndex(double *heatIndex);
-
-void readDHT(float *humidity, float *temperature);
 
 double readDHTtemp();
 

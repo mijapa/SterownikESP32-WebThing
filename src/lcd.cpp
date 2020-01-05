@@ -95,15 +95,6 @@ void loopLCD() {
     show = (show + 1) % 16;
 }
 
-void displayTemp(double temp) {
-    lcd.setBacklight(255);
-    lcd.home();
-    lcd.clear();
-    Serial.print("LCD write error: ");
-    Serial.println(lcd.getWriteError());
-    lcd.print(temp);
-}
-
 void displayBasic(double Setpoint, double Setpoint2, double hic, double thermocouple, int servoPercentage) {
     lcd.setBacklight(255);
     lcd.setCursor(0,
