@@ -38,6 +38,11 @@ ThingProperty LEFTtouchProperty("left_touch", "LEFT", BOOLEAN, "OnOffSwitch");
 ThingProperty RIGHTtouchProperty("right_touch", "RIGHT", BOOLEAN, "OnOffSwitch");
 ThingProperty MIDDLEtouchProperty("middle_touch", "MIDDLE", BOOLEAN, "OnOffSwitch");
 
+const char *powerSensorTypes[] = {"OnOffSwitch", "Sensor", nullptr};
+ThingDevice powerSensor("power", "Powering information", powerSensorTypes);
+ThingProperty externalPowerProperty("external", "External power source", BOOLEAN, "OnOffSwitch");
+ThingProperty batteryFullProperty("full", "Battery full", BOOLEAN, "OnOffSwitch");
+
 int isAdapterPresent() {
     if (!adapter) {
         Serial.println("No WebThing adapter, resetup");
@@ -137,6 +142,14 @@ void setupWebThing() {
         touchSensor.addProperty(&MIDDLEtouchProperty);
         adapter->addDevice(&touchSensor);
 
+        externalPowerProperty.readOnly = true;
+        externalPowerProperty.title = "External Power Source";
+        powerSensor.addProperty(&externalPowerProperty);
+        batteryFullProperty.readOnly = true;
+        batteryFullProperty.title = "Battery is fully loaded";
+        powerSensor.addProperty(&batteryFullProperty);
+        adapter->addDevice(&powerSensor);
+
         adapter->begin();
 
         Serial.println("HTTP server started");
@@ -198,6 +211,16 @@ void updateDallasWebThing(double temp){
     ThingPropertyValue value;
     value.number = temp;
     dallasProperty.setValue(value);
+    adapter->update();
+}
+
+void updatePowerWebThing(bool external, bool full){
+    ThingPropertyValue value;
+    value.boolean = external;
+    externalPowerProperty.setValue(value);
+    adapter->update();
+    value.boolean = full;
+    batteryFullProperty.setValue(value);
     adapter->update();
 }
 

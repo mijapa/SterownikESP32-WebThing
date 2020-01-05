@@ -40,6 +40,7 @@ void setup() {
     setupWebThing();
     setupPIDs();
     setupDallas();
+    poweringSetup();
     setupTouch();
     printTicker.attach(5, print);
 }
