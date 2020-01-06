@@ -38,7 +38,7 @@ void setupWiFi() {
     //if it does not connect it starts an access point with the specified name
     //here  "AutoConnectAP"
     //and goes into a blocking loop awaiting configuration
-    if (!wifiManager.autoConnect()) {
+    if (!wifiManager.autoConnect("Fireplace controller", "Stove@5")) {
         ledTicker.detach();
         Serial.println("failed to connect and hit timeout");
         return;
