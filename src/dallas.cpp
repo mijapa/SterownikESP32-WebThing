@@ -19,6 +19,7 @@ Ticker updateDallasTicker;
 double lastDallasTemp = 0;
 
 double getDallasTemp(){
+    sensors.requestTemperatures();
     double temp = sensors.getTempCByIndex(0);
     if (temp < -40){
         Serial.println("FAILURE TO READ DALLAS");
@@ -29,7 +30,6 @@ double getDallasTemp(){
 }
 
 void updateDallas(){
-    sensors.requestTemperatures();
     updateDallasWebThing(getDallasTemp());
 }
 
