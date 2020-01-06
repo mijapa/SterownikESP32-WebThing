@@ -4,8 +4,7 @@
 #include <Ticker.h>
 #include "lcd.h"
 
-LiquidCrystal_PCF8574 lcd(0x27); // set the LCD address to 0x27 for a 16 chars and 2 line display
-int show = -1;
+LiquidCrystal_PCF8574 lcd(LCD_I2C_ADD); // set the LCD address to 0x27 for a 16 chars and 2 line display
 
 Ticker dimTicker;
 bool isLcdOff = true;
@@ -32,15 +31,14 @@ void setupLCD() {
 
     // See http://playground.arduino.cc/Main/I2cScanner how to test for a I2C device.
     Wire.begin();
-    Wire.beginTransmission(0x27);
+    Wire.beginTransmission(LCD_I2C_ADD);
     error = Wire.endTransmission();
     Serial.print("Error: ");
     Serial.print(error);
 
     if (error == 0) {
         Serial.println(": LCD found.");
-        show = 0;
-        lcd.begin(16, 2); // initialize the lcd
+        lcd.begin(LCD_COLS, LCD_ROWS); // initialize the lcd
 
     } else {
         Serial.println(": LCD not found.");
@@ -50,76 +48,9 @@ void setupLCD() {
     isLcdOff = true;
 }
 
-void loopLCD() {
-    Serial.print("LCD show: ");
-    Serial.print(show);
-    if (show == 0) {
-        lcd.setBacklight(255);
-        lcd.home();
-        lcd.clear();
-        lcd.print("Hello LCD");
-        delay(1000);
-
-        lcd.setBacklight(0);
-        delay(400);
-        lcd.setBacklight(255);
-
-    } else if (show == 1) {
-        lcd.clear();
-        lcd.print("Cursor On");
-        lcd.cursor();
-
-    } else if (show == 2) {
-        lcd.clear();
-        lcd.print("Cursor Blink");
-        lcd.blink();
-
-    } else if (show == 3) {
-        lcd.clear();
-        lcd.print("Cursor OFF");
-        lcd.noBlink();
-        lcd.noCursor();
-
-    } else if (show == 4) {
-        lcd.clear();
-        lcd.print("Display Off");
-        lcd.noDisplay();
-
-    } else if (show == 5) {
-        lcd.clear();
-        lcd.print("Display On");
-        lcd.display();
-
-    } else if (show == 7) {
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print("*** first line.");
-        lcd.setCursor(0, 1);
-        lcd.print("*** second line.");
-
-    } else if (show == 8) {
-        lcd.scrollDisplayLeft();
-    } else if (show == 9) {
-        lcd.scrollDisplayLeft();
-    } else if (show == 10) {
-        lcd.scrollDisplayLeft();
-    } else if (show == 11) {
-        lcd.scrollDisplayRight();
-
-    } else if (show == 12) {
-        lcd.clear();
-        lcd.print("write-");
-
-    } else if (show > 12) {
-        lcd.print(show - 13);
-    }
-    show = (show + 1) % 16;
-}
-
 void displayBasic(double Setpoint, double Setpoint2, double hic, double thermocouple, int servoPercentage) {
     lcd.setCursor(0,
                   1);// set the cursor to column 0, line 1 (note: line 1 is the second row, since counting begins with 0)
-    //lcd.print(millis() / 1000);// print the number of seconds since reset:
     lcd.print(Setpoint2);//temperatura zadana DHT
     lcd.print(" ");
     lcd.print(hic); //temperatura odczuwalna DHT22
