@@ -9,6 +9,7 @@ void loopW5500();
 
 #define RESET_P    26                // Tie the Wiz820io/W5500 reset pin to ESP32 GPIO26 pin.
 
+#define W5500_CS 5
 const uint16_t localPort = 55432;        // Local port for UDP packets.
 
 /*

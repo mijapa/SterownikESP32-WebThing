@@ -139,7 +139,7 @@ void setupW5500() {
     Serial.println("\n\tUDP NTP Client v3.0\r\n");
 
     // Use Ethernet.init(pin) to configure the CS pin.
-    Ethernet.init(5);           // GPIO5 on the ESP32.
+    Ethernet.init(W5500_CS);           // GPIO5 on the ESP32.
     WizReset();
 
     /* 
