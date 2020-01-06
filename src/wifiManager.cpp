@@ -64,6 +64,6 @@ void tryConnectWiFi() {
         DNSServer dns;
         AsyncWiFiManager wifiManager(&server, &dns);
         wifiManager.setConfigPortalTimeout(1);
-        wifiManager.autoConnect();
+        wifiManager.autoConnect("Fireplace controller", "Stove@5");
     }
 }
