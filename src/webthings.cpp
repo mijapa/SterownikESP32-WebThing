@@ -30,7 +30,7 @@ const char *dallasSensorTypes[] = {"TemperatureSensor", "Sensor", nullptr};
 ThingDevice dallasSensor("dallas", "Dallas Temperature sensor", dallasSensorTypes);
 ThingProperty dallasProperty("dallas", "Dallas temperature", NUMBER, "TemperatureProperty");
 
-const char *touchSensorTypes[] = {"OnOffSwitch", "Sensor", nullptr};
+const char *touchSensorTypes[] = {"Sensor", nullptr};
 ThingDevice touchSensor("touch", "Touch Sensor", touchSensorTypes);
 ThingProperty UPtouchProperty("up_touch", "UP", BOOLEAN, "OnOffSwitch");
 ThingProperty DOWNtouchProperty("down_touch", "DOWN", BOOLEAN, "OnOffSwitch");
@@ -38,7 +38,7 @@ ThingProperty LEFTtouchProperty("left_touch", "LEFT", BOOLEAN, "OnOffSwitch");
 ThingProperty RIGHTtouchProperty("right_touch", "RIGHT", BOOLEAN, "OnOffSwitch");
 ThingProperty MIDDLEtouchProperty("middle_touch", "MIDDLE", BOOLEAN, "OnOffSwitch");
 
-const char *powerSensorTypes[] = {"OnOffSwitch", "Sensor", nullptr};
+const char *powerSensorTypes[] = {"Sensor", nullptr};
 ThingDevice powerSensor("power", "Powering information", powerSensorTypes);
 ThingProperty externalPowerProperty("external", "External power source", BOOLEAN, "OnOffSwitch");
 ThingProperty batteryFullProperty("full", "Battery full", BOOLEAN, "OnOffSwitch");
@@ -146,17 +146,15 @@ void setupWebThing() {
         externalPowerProperty.title = "External Power Source";
         powerSensor.addProperty(&externalPowerProperty);
         batteryFullProperty.readOnly = true;
-        batteryFullProperty.title = "Battery is fully loaded";
+        batteryFullProperty.title = "Battery is fully charged";
         powerSensor.addProperty(&batteryFullProperty);
         adapter->addDevice(&powerSensor);
 
         adapter->begin();
 
-        Serial.println("HTTP server started");
+        Serial.println("WebThing HTTP server started");
         Serial.print("http://");
-        Serial.print(WiFi.localIP());
-        Serial.print("/things/");
-        Serial.println(dhtSensor.id);
+        Serial.println(WiFi.localIP());
     } else {
         Serial.println("No local IP");
     }

@@ -25,13 +25,14 @@ void print(){
 }
 
 void setup() {
+    setupLCD();
+
     Serial.begin(115200);
     pinMode(BUILTIN_LED, OUTPUT);
     digitalWrite(BUILTIN_LED, HIGH);
 
     set_servo_at_begining();
 
-    setupLCD();
     toneHello();
     setupDHT();
     setupW5500();
@@ -40,8 +41,9 @@ void setup() {
     setupWebThing();
     setupPIDs();
     setupDallas();
-    poweringSetup();
     setupTouch();
+    poweringSetup();
+    setupAnalogReads();
     printTicker.attach(5, print);
 }
 

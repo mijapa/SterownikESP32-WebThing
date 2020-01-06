@@ -1,10 +1,28 @@
 #include <LiquidCrystal_PCF8574.h>
 #include <Wire.h>
 #include <HardwareSerial.h>
+#include <Ticker.h>
 #include "lcd.h"
 
 LiquidCrystal_PCF8574 lcd(0x27); // set the LCD address to 0x27 for a 16 chars and 2 line display
 int show = -1;
+
+Ticker dimTicker;
+bool isLcdOff = true;
+
+void turnOffLcd(){
+    lcd.setBacklight(0);
+    isLcdOff = true;
+}
+
+void setLcdOnThanOff(){
+    dimTicker.detach();
+    if(isLcdOff){
+        lcd.setBacklight(255);
+        isLcdOff = false;
+    }
+    dimTicker.once(DIM_LAG, turnOffLcd);
+}
 
 void setupLCD() {
     int error;
@@ -27,6 +45,9 @@ void setupLCD() {
     } else {
         Serial.println(": LCD not found.");
     } // if
+    lcd.clear();
+    turnOffLcd();
+    isLcdOff = true;
 }
 
 void loopLCD() {
@@ -96,7 +117,6 @@ void loopLCD() {
 }
 
 void displayBasic(double Setpoint, double Setpoint2, double hic, double thermocouple, int servoPercentage) {
-    lcd.setBacklight(255);
     lcd.setCursor(0,
                   1);// set the cursor to column 0, line 1 (note: line 1 is the second row, since counting begins with 0)
     //lcd.print(millis() / 1000);// print the number of seconds since reset:

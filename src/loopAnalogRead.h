@@ -8,4 +8,6 @@
 
 void printAnalogReads();
 
+void setupAnalogReads();
+
 void poweringSetup();

@@ -2,6 +2,7 @@
 #include <Ticker.h>
 #include "touch.h"
 #include "webthings.h"
+#include "lcd.h"
 
 #define  TOUCH_PIN1 13
 #define  TOUCH_PIN2 12
@@ -88,9 +89,13 @@ void updateTouch(){
     bool right = isTouched(touchRead(TOUCH_PIN3), touch_pin3_threshold);
     bool middle = isTouched(touchRead(TOUCH_PIN2), touch_pin2_threshold);
     updateTouchWebThing(up, down, left, right, middle);
+    if(up || down || left|| right||middle){
+        setLcdOnThanOff();
+    }
 }
 
 void setupTouch() {
+    set_threshold();
     set_threshold();
 //    touchAttachInterrupt(TOUCH_PIN1, gotTouch, touch_pin1_threshold);
 //    touchAttachInterrupt(TOUCH_PIN2, gotTouch, touch_pin2_threshold);

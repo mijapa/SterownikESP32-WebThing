@@ -12,6 +12,12 @@ Ticker updatePoweringTicker;
 bool external = false;
 bool full = false;
 
+void setupAnalogReads(){
+    pinMode(MEASURE_PIN1, INPUT);
+    pinMode(MEASURE_PIN2, INPUT_PULLUP);
+    pinMode(MEASURE_PIN3, INPUT);
+}
+
 void printAnalogReads() {
     Serial.print("Analog read: ");
     Serial.print(analogRead(MEASURE_PIN1));
