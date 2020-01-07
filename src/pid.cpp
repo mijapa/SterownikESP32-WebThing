@@ -8,11 +8,6 @@
 #include "maxThermocouple.h"
 #include "dht.h"
 
-#define RoomTempSetpoint_START 20 //wstępnie zadana temperatura (DHT)
-#define TEMP_ZAD_MAX 360 //zdefinioweanie zakresu temperatur termopara w kominie
-#define TEMP_ZAD_MIN 240
-#define SMALL_DIFF 10
-
 double ThermoSetpoint, ThermoInput, ServoOutput; //Define Variables we'll be connecting to
 double RoomTempSetpoint, RoomTempInput, ThermoSetpointOutput; //
 

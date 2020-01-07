@@ -2,9 +2,6 @@
 #include <ESP32Servo.h>
 #include <Ticker.h>
 
-#define SERVO_PIN 25
-#define SMALL_POS_DIFF 5
-
 Servo myservo;
 Ticker detachTicker;
 Ticker waitToAttach;

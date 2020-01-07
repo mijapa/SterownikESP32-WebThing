@@ -4,14 +4,6 @@
 #include "webthings.h"
 #include "lcd.h"
 
-#define  TOUCH_PIN1 13
-#define  TOUCH_PIN2 12
-#define  TOUCH_PIN3 14
-#define  TOUCH_PIN4 27
-#define  TOUCH_PIN5 15
-#define TOUCH_THRESHOLD_DIFF 3
-
-Ticker interruptTicker;
 Ticker updateTouchTicker;
 
 uint8_t touch_pin1_threshold = 0;

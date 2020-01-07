@@ -2,8 +2,6 @@
 #include <ESP32Tone.h>
 #include "buzzer.h"
 
-#define BUZZER_PIN 33 //switched witch 32 on the board description
-
 void toneHello() {
     int freq = 2000;
     int channel = 15;

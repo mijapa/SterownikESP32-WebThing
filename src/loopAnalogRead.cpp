@@ -3,10 +3,6 @@
 #include <HardwareSerial.h>
 #include <Ticker.h>
 
-#define MEASURE_PIN1 35 //UPS1
-#define MEASURE_PIN2 34 //UPS2
-#define MEASURE_PIN3 32 //Fireplace
-
 Ticker updatePoweringTicker;
 
 bool external = false;

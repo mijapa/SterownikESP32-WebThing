@@ -5,8 +5,6 @@
 #include <HardwareSerial.h>
 #include <Ticker.h>
 
-#define ONE_WIRE_BUS 3
-
 // Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
 
 OneWire oneWire(ONE_WIRE_BUS);
