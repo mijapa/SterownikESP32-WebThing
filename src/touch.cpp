@@ -12,7 +12,7 @@ uint8_t touch_pin3_threshold = 0;
 uint8_t touch_pin4_threshold = 0;
 uint8_t touch_pin5_threshold = 0;
 
-void set_threshold() {
+void setThreshold() {
     touch_pin1_threshold = touchRead(TOUCH_PIN1) - TOUCH_THRESHOLD_DIFF;
     touch_pin2_threshold = touchRead(TOUCH_PIN2) - TOUCH_THRESHOLD_DIFF;
     touch_pin3_threshold = touchRead(TOUCH_PIN3) - TOUCH_THRESHOLD_DIFF;
@@ -54,18 +54,6 @@ void printAllTouchValues() {
     Serial.println(touchRead(TOUCH_PIN5));
 }
 
-void enable_touch_interrupt() {
-    Serial.println("Enable touch interrupt");
-    interruptTicker.detach();
-    touch_pad_intr_enable();
-}
-
-void gotTouch() {//callback should be very short
-    Serial.print("Got Touch ##");
-    touch_pad_intr_disable();
-    interruptTicker.attach_ms(5000, enable_touch_interrupt);
-}
-
 int isTouched(int touchValue, int treshold) {
     if (touchValue < treshold) {
         return true;
@@ -87,15 +75,9 @@ void updateTouch(){
 }
 
 void setupTouch() {
-    set_threshold();
-    set_threshold();
-//    touchAttachInterrupt(TOUCH_PIN1, gotTouch, touch_pin1_threshold);
-//    touchAttachInterrupt(TOUCH_PIN2, gotTouch, touch_pin2_threshold);
-//    touchAttachInterrupt(TOUCH_PIN3, gotTouch, touch_pin3_threshold);
-//    touchAttachInterrupt(TOUCH_PIN4, gotTouch, touch_pin4_threshold);
-//    touchAttachInterrupt(TOUCH_PIN5, gotTouch, touch_pin5_threshold);
+    setThreshold();
+    setThreshold();
     updateTouchTicker.attach_ms(500, updateTouch);
-
 }
 
 void printAllTouchReadings() {
@@ -109,7 +91,6 @@ void printAllTouchReadings() {
     Serial.print(isTouched(touchRead(TOUCH_PIN4), touch_pin4_threshold));
     Serial.print(", ");
     Serial.println(isTouched(touchRead(TOUCH_PIN5), touch_pin5_threshold));
-
 }
 
 void printAllTouch() {
