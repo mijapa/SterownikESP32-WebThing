@@ -1,14 +1,17 @@
 #include <HardwareSerial.h>
 #include <ESP32Tone.h>
+#include <Ticker.h>
 #include "buzzer.h"
 
-void toneHello() {
-    int freq = 2000;
-    int channel = 15;
-    int resolution = 8;
+Ticker alarmTicker;
 
+int freq = 2000;
+int channel = 15;
+int resolution = 8;
+bool buzz = false;
+
+void toneHello() {
     Serial.println("Tone Hello");
-//    tone(BUZZER_PIN, 2500, 2500);
     ledcSetup(channel, freq, resolution);
     ledcAttachPin(BUZZER_PIN, channel);
 
@@ -20,4 +23,21 @@ void toneHello() {
 //    ledcDetachPin(BUZZER_PIN);
 //    digitalWrite(BUZZER_PIN, LOW);
 
+}
+
+void alarm() {
+    if (buzz)
+        ledcWrite(channel, 125);
+    else
+        ledcWrite(channel, 0);
+}
+
+void startAlarm() {
+    alarm();
+    alarmTicker.attach(1, alarm);
+}
+
+void stopAlarm() {
+    alarmTicker.detach();
+    ledcWrite(channel, 0);
 }
