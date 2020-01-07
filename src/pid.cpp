@@ -9,11 +9,6 @@
 #include "dht.h"
 
 #define RoomTempSetpoint_START 20 //wstępnie zadana temperatura (DHT)
-#define MAX_TEMP_ZAD_MAX 260 //maksymalna możliwa do zadania temperatura
-#define MIN_TEMP_ZAD_MIN 120 //minimalna możlliwa do zadania temperatura
-#define TEMP_ZAD_MAX_PRZY_ROZPALANIU 200 //temperatura
-#define TEMP_ZAD_MIN_PRZY_ROZPALANIU 170
-#define CZAS_ROZPALANIA 1200000 //czas rozpalania w milisekundach
 #define TEMP_ZAD_MAX 360 //zdefinioweanie zakresu temperatur termopara w kominie
 #define TEMP_ZAD_MIN 240
 #define SMALL_DIFF 10
@@ -21,7 +16,6 @@
 double ThermoSetpoint, ThermoInput, ServoOutput; //Define Variables we'll be connecting to
 double RoomTempSetpoint, RoomTempInput, ThermoSetpointOutput; //
 
-double aggKp = 1, aggKi = 0.1, aggKd = 0.5; //Define the aggressive  Tuning Parameters
 double consKp = 0.5, consKi = 0.025, consKd = 0.125;//Define the conservative Tuning Parameters
 PID servoPID(&ThermoInput, &ServoOutput, &ThermoSetpoint, consKp, consKi, consKd,
              DIRECT); //PID SERVO Specify the links and initial tuning parameters
@@ -81,7 +75,7 @@ void computeThermoSetpoint() {
 
 }
 
-void computeServoPoition() {
+void computeServoPosition() {
     if (ThermoSetpointOutput > 10 && ThermoSetpointOutput < 500) {
         ThermoSetpoint = ThermoSetpointOutput;//przekazanie obliczonej zadanej temperatury w kominie do ThermoSetpoint servoPID
     } else {
@@ -106,9 +100,9 @@ void changeRoomTempSetpoint(double newRoomTempSetpoint) {
 void calculatePIDs() {
     changeRoomTempSetpoint(readSetpointRoomTempFromGateway());
     computeThermoSetpoint();
-    computeServoPoition();
+    computeServoPosition();
 
-    set_servo_new_pos(ServoOutput);//przekazanie obliczonej pozycji do zmiennej serva
+    setServoNewPos(ServoOutput);//przekazanie obliczonej pozycji do zmiennej serva
 
     int servoPercentage = map(ServoOutput, SERVO_ZAMKN_MAX, SERVO_ZAMKN_MIN, 0, 100);
     displayBasic(ThermoSetpoint, RoomTempSetpoint, RoomTempInput, ThermoInput,

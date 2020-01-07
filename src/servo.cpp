@@ -38,7 +38,7 @@ void write_pos(int pos) {
     oldPos = pos;//zmiana starej pozycji na nową
 }
 
-void set_servo_new_pos(int pos) {
+void setServoNewPos(int pos) {
     if (pos != oldPos) { //sprawdzanie czy zadana pozycja dla serva się zmieniła
         detachTicker.detach();
         myservo.attach(SERVO_PIN);

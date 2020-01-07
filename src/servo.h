@@ -8,4 +8,4 @@
 
 void set_servo_at_begining();
 
-void set_servo_new_pos(int pos);
+void setServoNewPos(int pos);
