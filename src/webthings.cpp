@@ -1,47 +1,59 @@
 #include <WebThingAdapter.h>
-#include <Ticker.h>
 #include "webthings.h"
 
 WebThingAdapter *adapter;
 const char *dhtSensorTypes[] = {"TemperatureSensor", "MultiLevelSensor", "Sensor", nullptr};
 ThingDevice dhtSensor("dht22", "DHT22 Temperature & Humidity sensor", dhtSensorTypes);
-ThingProperty tempSensorProperty("temperature", "Temperature", NUMBER, "TemperatureProperty");
-ThingProperty humiditySensorProperty("humidity", "Humidity", NUMBER, "LevelProperty");
+ThingProperty tempSensorProperty("temperature", "Temperature",
+                                 NUMBER, "TemperatureProperty");
+ThingProperty humiditySensorProperty("humidity", "Humidity",
+                                     NUMBER, "LevelProperty");
 
 const char *thermocoupleSensorTypes[] = {"TemperatureSensor", "Sensor", nullptr};
 ThingDevice thermocoupleSensor("thermo", "MAX6675 Temperature sensor", thermocoupleSensorTypes);
-ThingProperty thermocoupleSensorProperty("temperature", "Temperature", NUMBER, "TemperatureProperty");
+ThingProperty thermocoupleSensorProperty("temperature", "Temperature",
+                                         NUMBER, "TemperatureProperty");
 
 const char *pidSensorTypes[] = {"Thermostat", "MultiLevelSensor", "TemperatureSensor", "Sensor", nullptr};
 ThingDevice pidSensor("pid", "PID servo regulation", pidSensorTypes);
-ThingProperty pidServoProperty("servo", "Servo regulation", NUMBER, "LevelProperty");
-ThingProperty pidRoomTemperatureProperty("room_temp", "Room Temperature", NUMBER,
-                                         "TemperatureProperty");
-ThingProperty pidSetpointRoomProperty("room_setpoint", "Room Setpoint", NUMBER, "TargetTemperatureProperty");
-ThingProperty pidHeatingCoolingProperty("on_off", "Fire", STRING, "HeatingCoolingProperty");
-const char *heatingCoolingSuportStates[] = {"off", "heating"};
+ThingProperty pidServoProperty("servo", "Servo regulation",
+                               NUMBER, "LevelProperty");
+ThingProperty pidRoomTemperatureProperty("room_temp", "Room Temperature",
+                                         NUMBER, "TemperatureProperty");
+ThingProperty pidSetpointRoomProperty("room_setpoint", "Room Setpoint",
+                                      NUMBER, "TargetTemperatureProperty");
+ThingProperty pidHeatingCoolingProperty("on_off", "Fire",
+                                        STRING, "HeatingCoolingProperty");
 String mode = "heating";
-ThingProperty pidSetpointChimneyProperty("chimney_setpoint", "Chimney Setpoint", NUMBER,
-                                         "TemperatureProperty");
-ThingProperty pidChimneyTempProperty("chimney_temp", "Chimney Temperature", NUMBER,
-                                     "TemperatureProperty");
+ThingProperty pidSetpointChimneyProperty("chimney_setpoint", "Chimney Setpoint",
+                                         NUMBER, "TemperatureProperty");
+ThingProperty pidChimneyTempProperty("chimney_temp", "Chimney Temperature",
+                                     NUMBER, "TemperatureProperty");
 
 const char *dallasSensorTypes[] = {"TemperatureSensor", "Sensor", nullptr};
 ThingDevice dallasSensor("dallas", "Dallas Temperature sensor", dallasSensorTypes);
-ThingProperty dallasProperty("dallas", "Dallas temperature", NUMBER, "TemperatureProperty");
+ThingProperty dallasProperty("dallas", "Dallas temperature",
+                             NUMBER, "TemperatureProperty");
 
 const char *touchSensorTypes[] = {"Sensor", nullptr};
 ThingDevice touchSensor("touch", "Touch Sensor", touchSensorTypes);
-ThingProperty UPtouchProperty("up_touch", "UP", BOOLEAN, "OnOffSwitch");
-ThingProperty DOWNtouchProperty("down_touch", "DOWN", BOOLEAN, "OnOffSwitch");
-ThingProperty LEFTtouchProperty("left_touch", "LEFT", BOOLEAN, "OnOffSwitch");
-ThingProperty RIGHTtouchProperty("right_touch", "RIGHT", BOOLEAN, "OnOffSwitch");
-ThingProperty MIDDLEtouchProperty("middle_touch", "MIDDLE", BOOLEAN, "OnOffSwitch");
+ThingProperty UPtouchProperty("up_touch", "UP",
+                              BOOLEAN, "OnOffSwitch");
+ThingProperty DOWNtouchProperty("down_touch", "DOWN",
+                                BOOLEAN, "OnOffSwitch");
+ThingProperty LEFTtouchProperty("left_touch", "LEFT",
+                                BOOLEAN, "OnOffSwitch");
+ThingProperty RIGHTtouchProperty("right_touch", "RIGHT",
+                                 BOOLEAN, "OnOffSwitch");
+ThingProperty MIDDLEtouchProperty("middle_touch", "MIDDLE",
+                                  BOOLEAN, "OnOffSwitch");
 
 const char *powerSensorTypes[] = {"Sensor", nullptr};
 ThingDevice powerSensor("power", "Powering information", powerSensorTypes);
-ThingProperty externalPowerProperty("external", "External power source", BOOLEAN, "OnOffSwitch");
-ThingProperty batteryFullProperty("full", "Battery full", BOOLEAN, "OnOffSwitch");
+ThingProperty externalPowerProperty("external", "External power source",
+                                    BOOLEAN, "OnOffSwitch");
+ThingProperty batteryFullProperty("full", "Battery full",
+                                  BOOLEAN, "OnOffSwitch");
 
 int isAdapterPresent() {
     if (!adapter) {
@@ -160,7 +172,10 @@ void setupWebThing() {
     }
 }
 
-void updateTouchWebThing(bool up, bool down, bool left, bool right, bool middle){
+void updateTouchWebThing(bool up, bool down, bool left, bool right, bool middle) {
+    if (!isAdapterPresent()) {
+        return;
+    }
     ThingPropertyValue value;
     value.boolean = up;
     UPtouchProperty.setValue(value);
@@ -179,7 +194,10 @@ void updateTouchWebThing(bool up, bool down, bool left, bool right, bool middle)
     adapter->update();
 }
 
-void setWebThingRoomSetpoint(double setpointRoom){
+void setWebThingRoomSetpoint(double setpointRoom) {
+    if (!isAdapterPresent()) {
+        return;
+    }
     ThingPropertyValue value;
     value.number = setpointRoom;
     pidSetpointRoomProperty.setValue(value);
@@ -205,14 +223,20 @@ void updatePIDWebThing(double servo, double setpointChimney, double setpointRoom
     adapter->update();
 }
 
-void updateDallasWebThing(double temp){
+void updateDallasWebThing(double temp) {
+    if (!isAdapterPresent()) {
+        return;
+    }
     ThingPropertyValue value;
     value.number = temp;
     dallasProperty.setValue(value);
     adapter->update();
 }
 
-void updatePowerWebThing(bool external, bool full){
+void updatePowerWebThing(bool external, bool full) {
+    if (!isAdapterPresent()) {
+        return;
+    }
     ThingPropertyValue value;
     value.boolean = external;
     externalPowerProperty.setValue(value);
