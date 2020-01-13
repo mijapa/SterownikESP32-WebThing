@@ -54,8 +54,11 @@ void setupPIDs() {
 }
 
 void checkComputedServoPos(){
-    if(ServoOutput<0 || ServoOutput > 100) {
-        Serial.println("WRONG COMPUTED SERVO POS");
+    int servoPercentage = map(ServoOutput, SERVO_ZAMKN_MAX, SERVO_ZAMKN_MIN, 0, 100);
+    if(servoPercentage<0 || servoPercentage > 100) {
+        Serial.print("WRONG COMPUTED SERVO POS: ");
+        Serial.println(ServoOutput);
+
         ServoOutput = SERVO_ZAMKN_MAX - SMALL_DIFF;
     }
 }
