@@ -7,7 +7,13 @@
 LiquidCrystal_PCF8574 lcd(LCD_I2C_ADD); // set the LCD address to 0x27 for a 16 chars and 2 line display
 
 Ticker dimTicker;
+Ticker lcdLagTicker;
 bool isLcdOff = true;
+bool display = true;
+
+void setDisplay(){
+    display = true;
+}
 
 void turnOffLcd(){
     lcd.setBacklight(0);
@@ -49,18 +55,22 @@ void setupLCD() {
 }
 
 void displayBasic(double Setpoint, double Setpoint2, double hic, double thermocouple, int servoPercentage) {
-    lcd.setCursor(0,
-                  1);// set the cursor to column 0, line 1 (note: line 1 is the second row, since counting begins with 0)
-    lcd.print(Setpoint2);//temperatura zadana DHT
-    lcd.print(" ");
-    lcd.print(hic); //temperatura odczuwalna DHT22
-    lcd.print(" ");
-    lcd.print(servoPercentage);//procent otwarcia przepustnicy obliczony na podstawie ServoOutput z PID
-    lcd.print("   ");
-    lcd.setCursor(7, 0);
-    lcd.print(" ");
-    lcd.print(thermocouple);//temperatura termopara
-    lcd.setCursor(0, 0);
-    lcd.print(Setpoint);//ThermoSetpoint z PID
-    lcd.print(" ");
+    if(display) {
+        display = false;
+        lcdLagTicker.once(1, setDisplay);
+        lcd.setCursor(0,
+                      1);// set the cursor to column 0, line 1 (note: line 1 is the second row, since counting begins with 0)
+        lcd.print(Setpoint2);//temperatura zadana DHT
+        lcd.print(" ");
+        lcd.print(hic); //temperatura odczuwalna DHT22
+        lcd.print(" ");
+        lcd.print(servoPercentage);//procent otwarcia przepustnicy obliczony na podstawie ServoOutput z PID
+        lcd.print("   ");
+        lcd.setCursor(7, 0);
+        lcd.print(" ");
+        lcd.print(thermocouple);//temperatura termopara
+        lcd.setCursor(0, 0);
+        lcd.print(Setpoint);//ThermoSetpoint z PID
+        lcd.print(" ");
+    }
 }

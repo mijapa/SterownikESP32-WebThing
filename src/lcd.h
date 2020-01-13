@@ -1,7 +1,7 @@
 #ifndef STEROWNIKESP32_WEBTHING_LCD_H
 #define STEROWNIKESP32_WEBTHING_LCD_H
 
-#define DIM_LAG 5
+#define DIM_LAG 10
 #define LCD_COLS 16
 #define LCD_ROWS 2
 #define LCD_I2C_ADD 0x27
