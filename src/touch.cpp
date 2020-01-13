@@ -56,38 +56,41 @@ void printAllTouchValues() {
     Serial.println(touchRead(TOUCH_PIN5));
 }
 
-int isTouched(int touchValue, int treshold) {
+int isTouched(int touchPin, int treshold) {
+    int touchValue = touchRead(touchPin);
     if (touchValue < treshold) {
-        return true;
-    } else {
-        return false;
+        delay(1);
+        touchValue = touchRead(touchPin);
+        if (touchValue < treshold)
+            return true;
     }
+    return false;
 }
 
-void updateTouch(){
-    bool up = isTouched(touchRead(TOUCH_PIN1), touch_pin1_threshold);
-    bool down = isTouched(touchRead(TOUCH_PIN5), touch_pin5_threshold);
-    bool left = isTouched(touchRead(TOUCH_PIN4), touch_pin4_threshold);
-    bool right = isTouched(touchRead(TOUCH_PIN3), touch_pin3_threshold);
-    bool middle = isTouched(touchRead(TOUCH_PIN2), touch_pin2_threshold);
+void updateTouch() {
+    bool up = isTouched(TOUCH_PIN1, touch_pin1_threshold);
+    bool down = isTouched(TOUCH_PIN5, touch_pin5_threshold);
+    bool left = isTouched(TOUCH_PIN4, touch_pin4_threshold);
+    bool right = isTouched(TOUCH_PIN3, touch_pin3_threshold);
+    bool middle = isTouched(TOUCH_PIN2, touch_pin2_threshold);
     updateTouchWebThing(up, down, left, right, middle);
-    if(up || down || left|| right||middle){
+    if (up || down || left || right || middle) {
         setLcdOnThanOff();
     }
 }
 
-void touchReady(){
+void touchReady() {
     timeToUpdateTouch = true;
 }
 
 void setupTouch() {
     setThreshold();
     setThreshold();
-    updateTouchTicker.attach_ms(500, touchReady);
+    updateTouchTicker.attach_ms(50, touchReady);
 }
 
-void loopTouch(){
-    if(timeToUpdateTouch){
+void loopTouch() {
+    if (timeToUpdateTouch) {
         timeToUpdateTouch = false;
         updateTouch();
     }
@@ -95,15 +98,15 @@ void loopTouch(){
 
 void printAllTouchReadings() {
     Serial.print("Touch sensors: ");
-    Serial.print(isTouched(touchRead(TOUCH_PIN1), touch_pin1_threshold));
+    Serial.print(isTouched(TOUCH_PIN1, touch_pin1_threshold));
     Serial.print(", ");
-    Serial.print(isTouched(touchRead(TOUCH_PIN2), touch_pin2_threshold));
+    Serial.print(isTouched(TOUCH_PIN2, touch_pin2_threshold));
     Serial.print(", ");
-    Serial.print(isTouched(touchRead(TOUCH_PIN3), touch_pin3_threshold));
+    Serial.print(isTouched(TOUCH_PIN3, touch_pin3_threshold));
     Serial.print(", ");
-    Serial.print(isTouched(touchRead(TOUCH_PIN4), touch_pin4_threshold));
+    Serial.print(isTouched(TOUCH_PIN4, touch_pin4_threshold));
     Serial.print(", ");
-    Serial.println(isTouched(touchRead(TOUCH_PIN5), touch_pin5_threshold));
+    Serial.println(isTouched(TOUCH_PIN5, touch_pin5_threshold));
 }
 
 void printAllTouch() {
