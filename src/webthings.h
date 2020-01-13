@@ -17,3 +17,5 @@ void updateDallasWebThing(double temp);
 void updateTouchWebThing(bool up, bool down, bool left, bool right, bool middle);
 
 void updatePowerWebThing(bool external, bool full);
+
+void loopWebThing();

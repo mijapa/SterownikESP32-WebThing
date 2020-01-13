@@ -39,7 +39,8 @@ void setServoNewPos(int pos) {
     if (pos != oldPos) { //sprawdzanie czy zadana pozycja dla serva się zmieniła
         detachTicker.detach();
         myservo.attach(SERVO_PIN);
-        waitToAttach.once_ms(5, write_pos, pos);
+        delay(5);
+        write_pos(pos);
     }
 }
 

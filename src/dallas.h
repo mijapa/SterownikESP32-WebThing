@@ -6,4 +6,6 @@
 
 void setupDallas();
 
+void loopDallas();
+
 void printDallasTemp();

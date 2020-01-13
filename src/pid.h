@@ -9,6 +9,6 @@
 
 void setupPIDs();
 
-void calculatePIDs();
+void loopPID();
 
 void printAllPid();

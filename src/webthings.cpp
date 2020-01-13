@@ -1,5 +1,8 @@
 #include <WebThingAdapter.h>
+#include <Ticker.h>
 #include "webthings.h"
+#include "maxThermocouple.h"
+#include "dht.h"
 
 WebThingAdapter *adapter;
 const char *dhtSensorTypes[] = {"TemperatureSensor", "MultiLevelSensor", "Sensor", nullptr};
@@ -54,6 +57,8 @@ ThingProperty externalPowerProperty("external", "External power source",
                                     BOOLEAN, "OnOffSwitch");
 ThingProperty batteryFullProperty("full", "Battery full",
                                   BOOLEAN, "OnOffSwitch");
+bool webThingReady = false;
+Ticker updateWebThingTicker;
 
 int isAdapterPresent() {
     if (!adapter) {
@@ -78,6 +83,10 @@ void updateWebThing(double temp, double hum, double thermocouple) {
     value.number = thermocouple;
     thermocoupleSensorProperty.setValue(value);
     adapter->update();
+}
+
+void timeToUpdateWebThing(){
+    webThingReady = true;
 }
 
 void setupWebThing() {
@@ -169,6 +178,14 @@ void setupWebThing() {
         Serial.println(WiFi.localIP());
     } else {
         Serial.println("No local IP");
+    }
+    updateWebThingTicker.attach_ms(500, timeToUpdateWebThing);
+}
+
+void loopWebThing(){
+    if(webThingReady){
+        webThingReady = false;
+        updateWebThing(readDHTtemp(), readDHThumi(), readThermocouple());
     }
 }
 

@@ -12,4 +12,6 @@ void printAnalogReads();
 
 void setupAnalogReads();
 
+void loopAnalogReads();
+
 void poweringSetup();

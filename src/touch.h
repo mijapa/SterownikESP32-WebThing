@@ -12,3 +12,5 @@
 void printAllTouch();
 
 void setupTouch();
+
+void loopTouch();

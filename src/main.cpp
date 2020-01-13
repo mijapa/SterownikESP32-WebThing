@@ -15,14 +15,23 @@
 #include "servo.h"
 
 Ticker printTicker;
+bool timeToPrint = false;
 
-void print(){
-    printAllTouch();
-    printAnalogReads();
-    printDallasTemp();
-    printAllPid();
-    Serial.println("\n");
+void printReady(){
+    timeToPrint = true;
 }
+
+void loopPrint(){
+    if(timeToPrint){
+        timeToPrint = false;
+        printAllTouch();
+        printAnalogReads();
+        printDallasTemp();
+        printAllPid();
+        Serial.println("\n");
+    }
+}
+
 
 void setup() {
     setupLCD();
@@ -44,16 +53,18 @@ void setup() {
     setupTouch();
     poweringSetup();
     setupAnalogReads();
-    printTicker.attach(5, print);
+    printTicker.attach(5, printReady);
 }
 
 void loop() {
     handleOTA();
-
-    updateWebThing(readDHTtemp(), readDHThumi(), readThermocouple());
-    delay(500);
+    loopDallas();
+    loopAnalogReads();
+    loopTouch();
+    loopPrint();
+    loopWebThing();
 
     tryConnectWiFi();
 
-    calculatePIDs();
+    loopPID();
 }

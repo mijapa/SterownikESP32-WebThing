@@ -7,6 +7,7 @@ Ticker updatePoweringTicker;
 
 bool external = false;
 bool full = false;
+bool updateAnalogReads = false;
 
 void setupAnalogReads(){
     pinMode(MEASURE_PIN1, INPUT);
@@ -39,6 +40,17 @@ void updatePowreing(){
     updatePowerWebThing(external, full);
 }
 
+void analogReady(){
+    updateAnalogReads = true;
+}
+
+void loopAnalogReads(){
+    if(updateAnalogReads){
+        updateAnalogReads = false;
+        updatePowreing();
+    }
+}
+
 void poweringSetup(){
-    updatePoweringTicker.attach_ms(500, updatePowreing);
+    updatePoweringTicker.attach_ms(500, analogReady);
 }

@@ -15,6 +15,7 @@ DallasTemperature sensors(&oneWire);
 Ticker updateDallasTicker;
 
 double lastDallasTemp = 0;
+bool updateDallas = false;
 
 double getDallasTemp(){
     sensors.requestTemperatures();
@@ -27,14 +28,21 @@ double getDallasTemp(){
     return temp;
 }
 
-void updateDallas(){
-    updateDallasWebThing(getDallasTemp());
+void dallasReady(){
+    updateDallas = true;
+}
+
+void loopDallas(){
+    if(updateDallas){
+        updateDallas = false;
+        updateDallasWebThing(getDallasTemp());
+    }
 }
 
 void setupDallas() {
     Serial.println("Dallas Temperature IC Setup");
     sensors.begin();
-    updateDallasTicker.attach_ms(500, updateDallas);
+    updateDallasTicker.attach_ms(500, dallasReady);
 }
 
 void printDallasTemp() {

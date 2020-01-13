@@ -12,6 +12,8 @@ uint8_t touch_pin3_threshold = 0;
 uint8_t touch_pin4_threshold = 0;
 uint8_t touch_pin5_threshold = 0;
 
+bool timeToUpdateTouch = false;
+
 void setThreshold() {
     touch_pin1_threshold = touchRead(TOUCH_PIN1) - TOUCH_THRESHOLD_DIFF;
     touch_pin2_threshold = touchRead(TOUCH_PIN2) - TOUCH_THRESHOLD_DIFF;
@@ -74,10 +76,21 @@ void updateTouch(){
     }
 }
 
+void touchReady(){
+    timeToUpdateTouch = true;
+}
+
 void setupTouch() {
     setThreshold();
     setThreshold();
-    updateTouchTicker.attach_ms(500, updateTouch);
+    updateTouchTicker.attach_ms(500, touchReady);
+}
+
+void loopTouch(){
+    if(timeToUpdateTouch){
+        timeToUpdateTouch = false;
+        updateTouch();
+    }
 }
 
 void printAllTouchReadings() {
