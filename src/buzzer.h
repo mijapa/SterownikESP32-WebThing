@@ -5,3 +5,7 @@
 #endif //STEROWNIKESP32_WEBTHING_BUZZER_H
 
 void toneHello();
+
+void startAlarm();
+
+void stopAlarm();

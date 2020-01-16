@@ -8,6 +8,7 @@
 #include "webthings.h"
 #include "maxThermocouple.h"
 #include "dht.h"
+#include "buzzer.h"
 
 double ThermoSetpoint, ThermoInput, ServoOutput; //Define Variables we'll be connecting to
 double RoomTempSetpoint, RoomTempInput, ThermoSetpointOutput; //
@@ -116,10 +117,19 @@ void calculatePIDs() {
     updatePIDWebThing(servoPercentage, ThermoSetpoint, RoomTempSetpoint, ThermoInput, RoomTempInput);
 }
 
+void handleAlarm(){
+    if(ThermoInput>400){
+        startAlarm();
+    } else {
+        stopAlarm();
+    }
+}
+
 void loopPID(){
     if(timeToUpdatePid) {
         timeToUpdatePid = false;
         calculatePIDs();
+        handleAlarm();
     }
 }
 
