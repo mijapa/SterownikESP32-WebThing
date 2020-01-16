@@ -18,6 +18,7 @@ PID servoPID(&ThermoInput, &ServoOutput, &ThermoSetpoint, consKp, consKi, consKd
 PID thermoPID2(&RoomTempInput, &ThermoSetpointOutput, &RoomTempSetpoint, 1, 0.05, 0.25, DIRECT);//PID TEMPERATURA
 bool timeToUpdatePid = false;
 Ticker pidUpdateTicker;
+int servoPercentage = 0;
 
 
 void setupThermoPID() {
@@ -54,7 +55,6 @@ void setupPIDs() {
 }
 
 void checkComputedServoPos(){
-    int servoPercentage = map(ServoOutput, SERVO_ZAMKN_MAX, SERVO_ZAMKN_MIN, 0, 100);
     if(servoPercentage<0 || servoPercentage > 100) {
         Serial.print("WRONG COMPUTED SERVO POS: ");
         Serial.println(ServoOutput);
@@ -93,6 +93,7 @@ void computeServoPosition() {
     //todo remove - test purpose only
     ThermoInput *= 10;
     servoPID.Compute();//obliczanie PID
+    servoPercentage = map(ServoOutput, SERVO_ZAMKN_MAX, SERVO_ZAMKN_MIN, 0, 100);
     checkComputedServoPos();
 }
 
@@ -110,7 +111,6 @@ void calculatePIDs() {
 
     setServoNewPos(ServoOutput);//przekazanie obliczonej pozycji do zmiennej serva
 
-    int servoPercentage = map(ServoOutput, SERVO_ZAMKN_MAX, SERVO_ZAMKN_MIN, 0, 100);
     displayBasic(ThermoSetpoint, RoomTempSetpoint, RoomTempInput, ThermoInput,
                  servoPercentage);
     updatePIDWebThing(servoPercentage, ThermoSetpoint, RoomTempSetpoint, ThermoInput, RoomTempInput);
@@ -125,8 +125,8 @@ void loopPID(){
 
 void printAllPid(){
     Serial.print("servoPercentage: ");
-    int servoPercentage = map(ServoOutput, SERVO_ZAMKN_MAX, SERVO_ZAMKN_MIN, 0, 100);
     Serial.println(servoPercentage);
+
     Serial.print("thermoSetpoint: ");
     Serial.print(ThermoSetpoint);
     Serial.print(" ,thermoInput: ");
