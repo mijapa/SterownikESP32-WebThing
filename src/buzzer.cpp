@@ -26,10 +26,14 @@ void toneHello() {
 }
 
 void alarm() {
-    if (buzz)
+    Serial.println("ALARM");
+    if (buzz) {
+        buzz = false;
         ledcWrite(channel, 125);
-    else
+    } else {
+        buzz = true;
         ledcWrite(channel, 0);
+    }
 }
 
 void startAlarm() {
