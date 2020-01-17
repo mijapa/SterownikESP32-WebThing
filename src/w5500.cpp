@@ -103,7 +103,7 @@ void setupW5500() {
      */
     Serial.print("Checking connection.");
     bool rdy_flag = false;
-    for (uint8_t i = 0; i <= 20; i++) {
+    for (uint8_t i = 0; i <= 5; i++) {
         if ((Ethernet.hardwareStatus() == EthernetNoHardware)
             || (Ethernet.linkStatus() == LinkOFF)) {
             Serial.print(".");

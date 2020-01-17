@@ -59,7 +59,7 @@ void printAllTouchValues() {
 int isTouched(int touchPin, int treshold) {
     int touchValue = touchRead(touchPin);
     if (touchValue < treshold) {
-        delay(1);
+        delay(3);
         touchValue = touchRead(touchPin);
         if (touchValue < treshold)
             return true;
