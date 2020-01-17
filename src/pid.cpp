@@ -24,7 +24,7 @@ int servoPercentage = 0;
 
 void setupThermoPID() {
     RoomTempSetpoint = RoomTempSetpoint_START;
-    thermoPID2.SetSampleTime(3000); //determines how often the PID algorithm evaluates
+    thermoPID2.SetSampleTime(PID_SAMPLE_TIME); //determines how often the PID algorithm evaluates
     thermoPID2.SetOutputLimits(TEMP_ZAD_MIN,
                                TEMP_ZAD_MAX); //zakres wyjściowy przy rozpalaniu
     thermoPID2.SetControllerDirection(
@@ -35,7 +35,7 @@ void setupThermoPID() {
 
 void setupServoPID() {
     ThermoSetpoint = SERVO_ZAMKN_MAX;
-    servoPID.SetSampleTime(3000); //determines how often the PID algorithm evaluates
+    servoPID.SetSampleTime(PID_SAMPLE_TIME); //determines how often the PID algorithm evaluates
     servoPID.SetOutputLimits(SERVO_ZAMKN_MIN,
                              SERVO_ZAMKN_MAX - SMALL_DIFF); //zakres wyjściowy, większy parametr serva większe zamknięcie
     servoPID.SetControllerDirection(
@@ -118,7 +118,7 @@ void calculatePIDs() {
 }
 
 void handleAlarm(){
-    if(ThermoInput>400){
+    if(ThermoInput>TOO_HIGH_THERMO_TEMP){
         startAlarm();
     } else {
         stopAlarm();
